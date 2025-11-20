@@ -19,5 +19,8 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	float GroundSpeed;
+
+	UFUNCTION()
+	void AnimNotify_SkeletonNotify();
 	
 };

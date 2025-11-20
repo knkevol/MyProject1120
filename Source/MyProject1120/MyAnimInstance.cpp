@@ -18,3 +18,8 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 
 }
+
+void UMyAnimInstance::AnimNotify_SkeletonNotify()
+{
+	UE_LOG(LogTemp, Warning, TEXT("AnimNotify_SkeletonNotify"));
+}
