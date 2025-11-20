@@ -5,6 +5,8 @@
 #include "MyCharacter.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "KismetAnimationLibrary.h"
+
 
 void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
@@ -14,6 +16,7 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (Character)
 	{
 		GroundSpeed = Character->GetCharacterMovement()->Velocity.Size2D();
+		Direction = UKismetAnimationLibrary::CalculateDirection(Character->GetCharacterMovement()->Velocity, Character->GetActorRotation());
 	}
 
 

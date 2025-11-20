@@ -19,5 +19,8 @@ public:
 	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration) override;
 	virtual void NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime) override;
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
+	float Scale = 1.0f;
 	
 };

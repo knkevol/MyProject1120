@@ -18,4 +18,13 @@ public:
 
 	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
 	virtual FString GetNotifyName_Implementation() const override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
+	int32 Gold = 100;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
+	TSubclassOf<AActor> SpapwnActor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
+	TObjectPtr<UParticleSystem> SpawnParticle;
 };

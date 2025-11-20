@@ -20,6 +20,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	float GroundSpeed;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	float Direction;
+
 	UFUNCTION()
 	void AnimNotify_SkeletonNotify();
 	
