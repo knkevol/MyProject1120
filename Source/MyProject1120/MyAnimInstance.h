@@ -47,6 +47,9 @@ public:
 	uint8 bCrouch : 1;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	uint8 bIsCrouched : 1;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	EState State = EState::Unarmed;
 
 	

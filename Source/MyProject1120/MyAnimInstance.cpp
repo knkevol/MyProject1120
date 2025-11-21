@@ -24,6 +24,7 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		bLeanR = Character->bLeanR;
 		State = Character->State;
 		bCrouch = Character->bCrouch;
+		bIsCrouched = Character->bIsCrouched;
 
 		float TargetLeanAngle = 0;
 		if (bLeanL)
