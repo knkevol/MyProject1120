@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "MyCharacter.h"
 #include "MyAnimInstance.generated.h"
+
 
 /**
  * 
@@ -41,6 +43,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	float CurrentLeanAngle;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	EState State = EState::Unarmed;
 
 	
 	

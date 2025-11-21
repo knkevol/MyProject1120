@@ -9,6 +9,14 @@
 class USpringArmComponent;
 class UCameraComponent;
 
+UENUM(BlueprintType)
+enum class EState : uint8
+{
+	Unarmed = 0 UMETA(DisplayName = "Unarmed"),
+	Pistol = 10 UMETA(DisplayName = "Pistol"),
+	Rifle = 20 UMETA(DisplayName = "Rifle")
+};
+
 UCLASS()
 class MYPROJECT1120_API AMyCharacter : public ACharacter
 {
@@ -50,5 +58,8 @@ public:
 	uint8 bLeanR : 1;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	uint8 bAiming : 1;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	EState State = EState::Unarmed;
 
 };

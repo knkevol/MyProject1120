@@ -40,7 +40,6 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 		//선형보간, frame별
 		CurrentLeanAngle = FMath::FInterpTo(CurrentLeanAngle, TargetLeanAngle, DeltaSeconds, 8.0f);
-		State = Character->State;
 	}
 
 
