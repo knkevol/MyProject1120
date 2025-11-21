@@ -23,6 +23,12 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	float Direction;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	float AimYaw;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	float AimPitch;
+
 	UFUNCTION()
 	void AnimNotify_SkeletonNotify();
 	

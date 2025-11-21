@@ -17,6 +17,8 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	{
 		GroundSpeed = Character->GetCharacterMovement()->Velocity.Size2D();
 		Direction = UKismetAnimationLibrary::CalculateDirection(Character->GetCharacterMovement()->Velocity, Character->GetActorRotation());
+		AimYaw = Character->GetBaseAimRotation().Yaw;
+		AimPitch = Character->GetBaseAimRotation().Pitch;
 	}
 
 

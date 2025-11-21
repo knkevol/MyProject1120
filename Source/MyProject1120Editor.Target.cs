@@ -8,8 +8,12 @@ public class MyProject1120EditorTarget : TargetRules
 	public MyProject1120EditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V5;
+		DefaultBuildSettings = BuildSettingsVersion.Latest;
 
-		ExtraModuleNames.AddRange( new string[] { "MyProject1120" } );
+        //BuildEnvironment = TargetBuildEnvironment.Unique;
+        IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_7;
+        //bOverrideBuildEnvironment = true;
+
+        ExtraModuleNames.AddRange( new string[] { "MyProject1120" } );
 	}
 }
