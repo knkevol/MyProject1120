@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "MyAnimInstance.h"
@@ -19,6 +19,27 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		Direction = UKismetAnimationLibrary::CalculateDirection(Character->GetCharacterMovement()->Velocity, Character->GetActorRotation());
 		AimYaw = Character->GetBaseAimRotation().Yaw;
 		AimPitch = Character->GetBaseAimRotation().Pitch;
+		bAiming = Character->bAiming;
+		bLeanL = Character->bLeanL;
+		bLeanR = Character->bLeanR;
+
+		float TargetLeanAngle = 0;
+		if (bLeanL)
+		{
+			TargetLeanAngle = -30.0f;
+
+		}
+		else if (bLeanR)
+		{
+			TargetLeanAngle = 30.0f;
+		}
+		else
+		{
+			TargetLeanAngle = 0;
+		}
+
+		//선형보간, frame별
+		CurrentLeanAngle = FMath::FInterpTo(CurrentLeanAngle, TargetLeanAngle, DeltaSeconds, 8.0f);
 	}
 
 

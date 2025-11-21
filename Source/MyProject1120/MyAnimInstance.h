@@ -17,6 +17,9 @@ class MYPROJECT1120_API UMyAnimInstance : public UAnimInstance
 public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
+	UFUNCTION()
+	void AnimNotify_SkeletonNotify();
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	float GroundSpeed;
 
@@ -29,7 +32,16 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	float AimPitch;
 
-	UFUNCTION()
-	void AnimNotify_SkeletonNotify();
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	uint8 bLeanL : 1;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	uint8 bLeanR : 1;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	uint8 bAiming : 1;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	float CurrentLeanAngle;
+
+	
 	
 };

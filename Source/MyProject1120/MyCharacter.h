@@ -41,4 +41,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Look(float InRoll, float InPitch);
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	uint8 bSpirnt : 1;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	uint8 bLeanL : 1;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	uint8 bLeanR : 1;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	uint8 bAiming : 1;
+
 };
