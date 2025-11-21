@@ -52,5 +52,7 @@ void AMyCharacter::Look(float InRoll, float InPitch)
 {
 	AddControllerYawInput(InRoll);
 	AddControllerPitchInput(InPitch);
+
+	CanCrouch();
 }
 

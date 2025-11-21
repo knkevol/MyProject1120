@@ -22,6 +22,8 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		bAiming = Character->bAiming;
 		bLeanL = Character->bLeanL;
 		bLeanR = Character->bLeanR;
+		State = Character->State;
+		bCrouch = Character->bCrouch;
 
 		float TargetLeanAngle = 0;
 		if (bLeanL)
@@ -40,7 +42,6 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 		//선형보간, frame별
 		CurrentLeanAngle = FMath::FInterpTo(CurrentLeanAngle, TargetLeanAngle, DeltaSeconds, 8.0f);
-		State = Character->State;
 	}
 
 

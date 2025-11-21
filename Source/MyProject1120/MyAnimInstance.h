@@ -43,6 +43,8 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	float CurrentLeanAngle;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	uint8 bCrouch : 1;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	EState State = EState::Unarmed;
