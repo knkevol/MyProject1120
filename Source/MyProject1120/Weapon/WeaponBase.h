@@ -40,6 +40,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Reload();
 
+	UFUNCTION(BlueprintCallable)
+	void Fire();
+
 	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)

@@ -36,7 +36,6 @@ void AMyCharacter::BeginPlay()
 	if (ChildWeapon)
 	{
 		ChildWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, ChildWeapon->SocketName);
-		State = EState::Pistol;
 	}
 	
 }

@@ -62,6 +62,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ReloadWeapon();
 
+	UFUNCTION(BlueprintCallable)
+	void DoFire();
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	uint8 bSpirnt : 1;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
@@ -84,5 +87,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
 	TObjectPtr<UInputAction> IA_Reload;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
+	TObjectPtr<UInputAction> IA_Fire;
 
 };

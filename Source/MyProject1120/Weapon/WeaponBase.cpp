@@ -35,3 +35,8 @@ void AWeaponBase::Reload()
 	UE_LOG(LogTemp, Warning, TEXT("Reload %d"), CurBullet);
 }
 
+void AWeaponBase::Fire()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Fire"));
+}
+
