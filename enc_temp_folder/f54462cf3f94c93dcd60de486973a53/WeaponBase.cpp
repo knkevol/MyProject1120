@@ -32,6 +32,5 @@ void AWeaponBase::Tick(float DeltaTime)
 void AWeaponBase::Reload()
 {
 	CurBullet = MaxBullet;
-	UE_LOG(LogTemp, Warning, TEXT("Reload %d"), CurBullet);
 }
 

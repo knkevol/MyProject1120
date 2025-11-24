@@ -85,3 +85,18 @@ void AMyCharacter::Reload()
 	}
 }
 
+void AMyCharacter::HitReact()
+{
+	//FString SectionName = FString::Printf(TEXT("%d"), FMath::RandRange(1, 8));
+	//PlayAnimMontage(HitMontage, 1.0, FName(*SectionName));
+}
+
+void AMyCharacter::ReloadWeapon()
+{
+	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
+	if (ChildWeapon)
+	{
+		ChildWeapon->Reload();
+	}
+}
+

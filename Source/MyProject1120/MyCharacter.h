@@ -56,6 +56,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Reload();
 
+	UFUNCTION(BlueprintCallable)
+	void HitReact();
+
+	UFUNCTION(BlueprintCallable)
+	void ReloadWeapon();
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	uint8 bSpirnt : 1;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
