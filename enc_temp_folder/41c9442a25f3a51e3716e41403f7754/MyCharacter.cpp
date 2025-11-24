@@ -6,8 +6,6 @@
 #include "GameFrameWork/SpringArmComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/ChildActorComponent.h"
-#include "EnhancedInputComponent.h"
-#include "Weapon/WeaponBase.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -30,13 +28,6 @@ AMyCharacter::AMyCharacter()
 void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	//무기 집으면 잡게 이동
-	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
-	if (ChildWeapon)
-	{
-		ChildWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, ChildWeapon->SocketName);
-	}
 	
 }
 
@@ -51,12 +42,6 @@ void AMyCharacter::Tick(float DeltaTime)
 void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	UEnhancedInputComponent* UIC = Cast<UEnhancedInputComponent>(PlayerInputComponent);
-	if (UIC)
-	{
-		UIC->BindAction(IA_Reload, ETriggerEvent::Completed, this, &AMyCharacter::Reload);
-	}
 
 }
 
@@ -77,11 +62,6 @@ void AMyCharacter::Look(float InRoll, float InPitch)
 
 void AMyCharacter::Reload()
 {
-	//PlayAnimMontage;
-	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
-	if (ChildWeapon)
-	{
-		PlayAnimMontage(ChildWeapon->ReloadMontage);
-	}
+	
 }
 

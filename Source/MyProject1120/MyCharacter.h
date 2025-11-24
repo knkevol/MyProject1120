@@ -8,6 +8,7 @@
 
 class USpringArmComponent;
 class UCameraComponent;
+class UInputAction;
 
 UENUM(BlueprintType)
 enum class EState : uint8
@@ -43,11 +44,17 @@ public:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "1120")
 	TObjectPtr<UCameraComponent> Camera;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	TObjectPtr<class UChildActorComponent> Weapon;
+
 	UFUNCTION(BlueprintCallable)
 	void Move(float InRoll, float InPitch);
 
 	UFUNCTION(BlueprintCallable)
 	void Look(float InRoll, float InPitch);
+
+	UFUNCTION(BlueprintCallable)
+	void Reload();
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	uint8 bSpirnt : 1;
@@ -68,5 +75,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
 	TObjectPtr<UAnimMontage> DeathMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
+	TObjectPtr<UInputAction> IA_Reload;
 
 };

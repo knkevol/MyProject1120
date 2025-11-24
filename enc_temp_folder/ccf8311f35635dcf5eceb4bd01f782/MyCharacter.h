@@ -43,11 +43,17 @@ public:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "1120")
 	TObjectPtr<UCameraComponent> Camera;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	TObjectPtr<class UChildActorComponent> Weapon;
+
 	UFUNCTION(BlueprintCallable)
 	void Move(float InRoll, float InPitch);
 
 	UFUNCTION(BlueprintCallable)
 	void Look(float InRoll, float InPitch);
+
+	UFUNCTION(BlueprintCallable)
+	void Reload();
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	uint8 bSpirnt : 1;
@@ -62,5 +68,11 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	EState State = EState::Unarmed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
+	TObjectPtr<UAnimMontage> HitMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
+	TObjectPtr<UAnimMontage> DeathMontage;
 
 };
