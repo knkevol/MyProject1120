@@ -63,10 +63,4 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	EState State = EState::Unarmed;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
-	TObjectPtr<UAnimMontage> HitMontage;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
-	TObjectPtr<UAnimMontage> DeathMontage;
-
 };

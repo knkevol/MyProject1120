@@ -37,6 +37,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Component)
 	TObjectPtr<UAnimMontage> ReloadMontage;
 
+	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
 	TSubclassOf<AProjectileBase> ProjectileTemplate;
 
