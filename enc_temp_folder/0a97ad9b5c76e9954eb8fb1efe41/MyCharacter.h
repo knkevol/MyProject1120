@@ -65,8 +65,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DoFire();
 
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
-
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	uint8 bSpirnt : 1;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
@@ -77,12 +75,6 @@ public:
 	uint8 bAiming : 1;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	uint8 bCrouch : 1;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
-	float CurHp = 100;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
-	float MaxHp = 100;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	EState State = EState::Unarmed;
