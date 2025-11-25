@@ -168,7 +168,7 @@ void AMyCharacter::DoFire()
 			//RPG
 			//UGameplayStatics::ApplyDamage(HitResult.GetActor(), 50, GetController(), this, UDamageTypeBase::StaticClass());
 			//총
-			UGameplayStatics::ApplyPointDamage(HitResult.GetActor(), 5, -HitResult.ImpactNormal, HitResult, GetController(), this, UDamageTypeBase::StaticClass());
+			UGameplayStatics::ApplyPointDamage(HitResult.GetActor(), 10, -HitResult.ImpactNormal, HitResult, GetController(), this, UDamageTypeBase::StaticClass());
 			//범위, 수류탄
 			//UGameplayStatics::ApplyRadialDamage(HitResult.GetActor(),50, HitResult.ImpactPoint, 300.0f, UDamageTypeBase::StaticClass(), IgnoreActors,	this, GetController(), true);
 			UE_LOG(LogTemp, Warning, TEXT("HitObject : %s"), *HitResult.GetActor()->GetName());
