@@ -109,75 +109,14 @@ void AMyCharacter::ReloadWeapon()
 	}
 }
 
-void AMyCharacter::DoFire(/*const FInputActionValue& Value*/)
+void AMyCharacter::DoFire()
 {
 	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
 	if (ChildWeapon)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("AMyCharacter::DoFire()"));
 		ChildWeapon->Fire();
 	}
-
-	APlayerController* PC = Cast<APlayerController>(GetController());
-	if (PC)
-	{
-		//PC->DeprojectMousePositionToWorld()
-		int32 SizeX = 0;
-		int32 SizeY = 0;
-		int32 CenterX = 0;
-		int32 CenterY = 0;
-		FVector WorldDirection;
-		FVector WorldLocation;
-		FVector CameraLocation;
-		FRotator CameraRotation;
-		
-		PC->GetViewportSize(SizeX, SizeY);
-		CenterX = SizeX / 2;
-		CenterY = SizeY / 2;
-
-		
-		PC->DeprojectScreenPositionToWorld((float)CenterX, (float)CenterY, WorldLocation, WorldDirection);
-		PC->GetPlayerViewPoint(CameraLocation, CameraRotation);
-
-		FVector Start = CameraLocation;
-		FVector End = CameraLocation + (WorldDirection * 100000.0f);
-		
-		TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
-		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldStatic));
-		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldDynamic));
-		//ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
-		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_PhysicsBody));
-		
-		
-		TArray<AActor*> IgnoreActors;
-		//해당작업 마지막 인자로 구현가능
-		//IgnoreActors.Add(this);
-
-		FHitResult HitResult;
-
-		bool bResult = UKismetSystemLibrary::LineTraceSingleForObjects(
-			GetWorld(),
-			Start,
-			End,
-			ObjectTypes,
-			true,
-			IgnoreActors,
-			EDrawDebugTrace::ForDuration,
-			HitResult,
-			true
-		);
-		if (bResult)
-		{
-			//RPG
-			//UGameplayStatics::ApplyDamage(HitResult.GetActor(), 50, GetController(), this, UDamageTypeBase::StaticClass());
-			//총
-			UGameplayStatics::ApplyPointDamage(HitResult.GetActor(), 5, -HitResult.ImpactNormal, HitResult, GetController(), this, UDamageTypeBase::StaticClass());
-			//범위, 수류탄
-			//UGameplayStatics::ApplyRadialDamage(HitResult.GetActor(),50, HitResult.ImpactPoint, 300.0f, UDamageTypeBase::StaticClass(), IgnoreActors,	this, GetController(), true);
-			UE_LOG(LogTemp, Warning, TEXT("HitObject : %s"), *HitResult.GetActor()->GetName());
-		}
-	}
-
-
 }
 
 void AMyCharacter::StartFire()
@@ -189,6 +128,11 @@ void AMyCharacter::StartFire()
 void AMyCharacter::StopFire()
 {
 	bIsFire = false;
+	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
+	if (ChildWeapon)
+	{
+		ChildWeapon->StopFire();
+	}
 
 }
 
@@ -246,7 +190,7 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		FPointDamageEvent* Event = (FPointDamageEvent*)(&DamageEvent);
 		if (Event)
 		{
-			DoHit();
+			
 			CurHp -= DamageAmount;
 			UE_LOG(LogTemp, Warning, TEXT("Point Damage : %f %s"), DamageAmount, *(Event->HitInfo.BoneName.ToString()));
 			UE_LOG(LogTemp, Warning, TEXT("Point CurHp : %f"), CurHp);
@@ -268,7 +212,7 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		UE_LOG(LogTemp, Warning, TEXT("Damage : %f"), DamageAmount);
 		UE_LOG(LogTemp, Warning, TEXT("CurHp : %f"), CurHp);
 	}
-
+	DoHit();
 
 	if (CurHp <= 0)
 	{

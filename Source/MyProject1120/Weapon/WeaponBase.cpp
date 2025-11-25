@@ -44,24 +44,108 @@ void AWeaponBase::Reload()
 
 void AWeaponBase::Fire()
 {
+	UE_LOG(LogTemp, Warning, TEXT("AWeaponBase::Fire()"));
 	float CurrentTimeofShoot = GetWorld()->TimeSeconds - TimeofLastShoot;
 
-	if (CurrentTimeofShoot > ReFireRate)
+	if (CurrentTimeofShoot < ReFireRate)
 	{
 		return;
 	}
 
 	if (bFullAuto)
 	{
-		GetWorld()->GetTimerManager().SetTimer(ReFireTimer, this, &AWeaponBase::Fire, ReFireRate, false);
+		GetWorld()->GetTimerManager().SetTimer(RefireTimer, this, &AWeaponBase::Fire, ReFireRate, false);
 	}
 
 	ACharacter* Character = Cast<ACharacter>(GetOwner());
 	ensure(Character);
+	if (!Character)
+	{
+		return;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AWeaponBase::Fire() _ Character"));
+	}
+
 
 	APlayerController* PC = Cast<APlayerController>(Character->GetController());
 	if (PC)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("AWeaponBase::Fire() _ PC"));
+		int32 SizeX = 0;
+		int32 SizeY = 0;
+		int32 CenterX = 0;
+		int32 CenterY = 0;
+		FVector WorldDirection;
+		FVector WorldLocation;
+		FVector CameraLocation;
+		FRotator CameraRotation;
+
+		PC->GetViewportSize(SizeX, SizeY);
+		CenterX = SizeX / 2;
+		CenterY = SizeY / 2;
+
+		PC->DeprojectScreenPositionToWorld((float)CenterX, (float)CenterY,
+			WorldLocation, WorldDirection);
+
+		PC->GetPlayerViewPoint(CameraLocation, CameraRotation);
+
+		FVector Start = CameraLocation;
+		FVector End = CameraLocation + WorldDirection * 100000.0f;
+
+		TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldStatic));
+		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldDynamic));
+		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_PhysicsBody));
+
+		TArray<AActor*> IngnoreActors;
+		FHitResult HitResult;
+
+		bool bResult = UKismetSystemLibrary::LineTraceSingleForObjects(
+			GetWorld(),
+			Start,
+			End,
+			ObjectTypes,
+			true,
+			IngnoreActors,
+			EDrawDebugTrace::ForDuration,
+			HitResult,
+			true
+		);
+
+		if (bResult)
+		{
+			//RPG 
+			//UGameplayStatics::ApplyDamage(HitResult.GetActor(),
+			//	50,
+			//	PC,
+			//	this,
+			//	UDamageTypeBase::StaticClass()
+			//);
+
+			//ÃÑ½î´Â µ¥¹ÌÁö
+			UGameplayStatics::ApplyPointDamage(HitResult.GetActor(),
+				10,
+				-HitResult.ImpactNormal,
+				HitResult,
+				PC,
+				this,
+				UDamageTypeBase::StaticClass()
+			);
+
+			////¹üÀ§ °ø°Ý, ÆøÅº
+			//UGameplayStatics::ApplyRadialDamage(HitResult.GetActor(),
+			//	10,
+			//	HitResult.ImpactPoint,
+			//	300.0f,
+			//	UDamageTypeBase::StaticClass(),
+			//	IngnoreActors,
+			//	this,
+			//	PC,
+			//	true
+			//);
+		}
 
 	}
 
@@ -80,5 +164,6 @@ void AWeaponBase::StopFire()
 
 void AWeaponBase::FireProjectile()
 {
+	GetWorld()->GetTimerManager().ClearTimer(RefireTimer);
 }
 

@@ -75,5 +75,5 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
 	float TimeofLastShoot = 0.0f;
 
-	FTimerHandle ReFireTimer;
+	FTimerHandle RefireTimer;
 };
