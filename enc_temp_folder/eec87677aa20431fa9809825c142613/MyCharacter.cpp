@@ -62,7 +62,8 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	if (UIC)
 	{
 		UIC->BindAction(IA_Reload, ETriggerEvent::Completed, this, &AMyCharacter::Reload);
-		UIC->BindAction(IA_Fire, ETriggerEvent::Triggered, this, &AMyCharacter::DoFire);
+		UIC->BindAction(IA_Fire, ETriggerEvent::Started, this, &AMyCharacter::StartFire);
+		UIC->BindAction(IA_Fire, ETriggerEvent::Completed, this, &AMyCharacter::StopFire);
 	}
 
 }
@@ -107,13 +108,13 @@ void AMyCharacter::ReloadWeapon()
 	}
 }
 
-void AMyCharacter::DoFire()
+void AMyCharacter::DoFire(/*const FInputActionValue& Value*/)
 {
-	//AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
-	//if (ChildWeapon)
-	//{
-	//	ChildWeapon->Fire();
-	//}
+	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
+	if (ChildWeapon)
+	{
+		ChildWeapon->Fire();
+	}
 
 	APlayerController* PC = Cast<APlayerController>(GetController());
 	if (PC)
@@ -178,6 +179,18 @@ void AMyCharacter::DoFire()
 
 }
 
+void AMyCharacter::StartFire()
+{
+	bIsFire = true;
+	DoFire();
+}
+
+void AMyCharacter::StopFire()
+{
+	bIsFire = false;
+
+}
+
 void AMyCharacter::DoDeadEnd()
 {
 	GetController()->SetActorEnableCollision(false);
@@ -198,12 +211,11 @@ void AMyCharacter::DoDead()
 	int32 RandDeathListNum = FMath::RandRange(0, DeathMontageList.Num() - 1);
 
 	PlayAnimMontage(DeathMontage, 1.0f, DeathMontageList[RandDeathListNum]);
+	UE_LOG(LogTemp, Warning, TEXT("DoDead"));
 }
 
-float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+void AMyCharacter::DoHit()
 {
-	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-
 	TArray<FName> HitMontageList;
 	HitMontageList.Add(TEXT("BackMed"));
 	HitMontageList.Add(TEXT("FrontHvy"));
@@ -215,14 +227,26 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	HitMontageList.Add(TEXT("FrontMed2"));
 	int32 RandHitListNum = FMath::RandRange(0, HitMontageList.Num() - 1);
 
+	PlayAnimMontage(HitMontage, 1.0f, HitMontageList[RandHitListNum]);
+}
+
+float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	if (CurHp <= 0)
+	{
+		return DamageAmount;
+	}
+
 	//데미지 종류에 맞게 데미지 작업
 	if (DamageEvent.IsOfType(FPointDamageEvent::ClassID))
 	{
 		FPointDamageEvent* Event = (FPointDamageEvent*)(&DamageEvent);
 		if (Event)
 		{
+			DoHit();
 			CurHp -= DamageAmount;
-			PlayAnimMontage(HitMontage, 1.0f, HitMontageList[RandHitListNum]);
 			UE_LOG(LogTemp, Warning, TEXT("Point Damage : %f %s"), DamageAmount, *(Event->HitInfo.BoneName.ToString()));
 			UE_LOG(LogTemp, Warning, TEXT("Point CurHp : %f"), CurHp);
 		}

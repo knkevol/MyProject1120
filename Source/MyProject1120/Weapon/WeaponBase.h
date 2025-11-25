@@ -43,6 +43,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Fire();
 
+	UFUNCTION(BlueprintCallable)
+	void StopFire();
+
+	UFUNCTION(BlueprintCallable)
+	void FireProjectile();
+
 	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
@@ -60,4 +66,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
 	TObjectPtr<class USoundBase> FireSound;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
+	uint8 bFullAuto : 1 = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data, meta = (ClampMin = 0.1f, ClampMax = 2.0f, Unit = "s"))
+	float ReFireRate = 0.5f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
+	float TimeofLastShoot = 0.0f;
+
+	FTimerHandle ReFireTimer;
 };

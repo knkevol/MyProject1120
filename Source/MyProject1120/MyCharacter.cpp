@@ -42,6 +42,7 @@ void AMyCharacter::BeginPlay()
 	{
 		ChildWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, ChildWeapon->SocketName);
 		State = EState::Pistol;
+		ChildWeapon->SetOwner(this);
 	}
 	
 }
@@ -62,7 +63,8 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	if (UIC)
 	{
 		UIC->BindAction(IA_Reload, ETriggerEvent::Completed, this, &AMyCharacter::Reload);
-		UIC->BindAction(IA_Fire, ETriggerEvent::Triggered, this, &AMyCharacter::DoFire);
+		UIC->BindAction(IA_Fire, ETriggerEvent::Started, this, &AMyCharacter::StartFire);
+		UIC->BindAction(IA_Fire, ETriggerEvent::Completed, this, &AMyCharacter::StopFire);
 	}
 
 }
@@ -107,7 +109,7 @@ void AMyCharacter::ReloadWeapon()
 	}
 }
 
-void AMyCharacter::DoFire()
+void AMyCharacter::DoFire(/*const FInputActionValue& Value*/)
 {
 	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
 	if (ChildWeapon)
@@ -175,6 +177,18 @@ void AMyCharacter::DoFire()
 		}
 	}
 
+
+}
+
+void AMyCharacter::StartFire()
+{
+	bIsFire = true;
+	DoFire();
+}
+
+void AMyCharacter::StopFire()
+{
+	bIsFire = false;
 
 }
 

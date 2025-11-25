@@ -4,6 +4,13 @@
 #include "WeaponBase.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Engine/World.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "DamageTypeBase.h"
+#include "Engine/DamageEvents.h"
+#include "GameFramework/Character.h"
+#include "TimerManager.h"
+
 
 // Sets default values
 AWeaponBase::AWeaponBase()
@@ -37,8 +44,41 @@ void AWeaponBase::Reload()
 
 void AWeaponBase::Fire()
 {
+	float CurrentTimeofShoot = GetWorld()->TimeSeconds - TimeofLastShoot;
+
+	if (CurrentTimeofShoot > ReFireRate)
+	{
+		return;
+	}
+
+	if (bFullAuto)
+	{
+		GetWorld()->GetTimerManager().SetTimer(ReFireTimer, this, &AWeaponBase::Fire, ReFireRate, false);
+	}
+
+	ACharacter* Character = Cast<ACharacter>(GetOwner());
+	ensure(Character);
+
+	APlayerController* PC = Cast<APlayerController>(Character->GetController());
+	if (PC)
+	{
+
+	}
+
 	CurBullet--;
 	UE_LOG(LogTemp, Warning, TEXT("Fire %d"), CurBullet);
 	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), FireSound, GetActorLocation());
+
+	
+	TimeofLastShoot = GetWorld()->TimeSeconds;
+}
+
+void AWeaponBase::StopFire()
+{
+	//GetWorld()->
+}
+
+void AWeaponBase::FireProjectile()
+{
 }
 

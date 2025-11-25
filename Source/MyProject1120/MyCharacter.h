@@ -63,7 +63,13 @@ public:
 	void ReloadWeapon();
 
 	UFUNCTION(BlueprintCallable)
-	void DoFire();
+	void DoFire(/*const FInputActionValue& Value*/);
+
+	UFUNCTION(BlueprintCallable)
+	void StartFire();
+
+	UFUNCTION(BlueprintCallable)
+	void StopFire();
 
 	UFUNCTION(BlueprintCallable)
 	void DoDeadEnd();
@@ -92,6 +98,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	float MaxHp = 100;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	uint8 bIsFire : 1 = false;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	EState State = EState::Unarmed;
