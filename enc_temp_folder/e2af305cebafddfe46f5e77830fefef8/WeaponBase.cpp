@@ -3,7 +3,7 @@
 
 #include "WeaponBase.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "Kismet/GameplayStatics.h"
+
 
 // Sets default values
 AWeaponBase::AWeaponBase()
@@ -37,8 +37,6 @@ void AWeaponBase::Reload()
 
 void AWeaponBase::Fire()
 {
-	CurBullet--;
-	UE_LOG(LogTemp, Warning, TEXT("Fire %d"), CurBullet);
-	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), FireSound, GetActorLocation());
+	UE_LOG(LogTemp, Warning, TEXT("Fire"));
 }
 

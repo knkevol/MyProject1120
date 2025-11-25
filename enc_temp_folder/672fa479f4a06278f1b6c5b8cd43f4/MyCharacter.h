@@ -71,9 +71,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DoDead();
 
-	UFUNCTION(BlueprintCallable)
-	void DoHit();
-
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")

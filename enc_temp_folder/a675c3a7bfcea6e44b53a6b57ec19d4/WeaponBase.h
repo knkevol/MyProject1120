@@ -57,7 +57,4 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
 	int32 CurBullet = 100;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
-	TObjectPtr<class USoundBase> FireSound;
-
 };

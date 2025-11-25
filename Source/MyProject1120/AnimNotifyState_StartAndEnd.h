@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotifyState.h"
-#include "MyAnimNotifyState_StartAndEnd.generated.h"
+#include "AnimNotifyState_StartAndEnd.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MYPROJECT1120_API UMyAnimNotifyState_StartAndEnd : public UAnimNotifyState
+class MYPROJECT1120_API UAnimNotifyState_StartAndEnd : public UAnimNotifyState
 {
 	GENERATED_BODY()
 

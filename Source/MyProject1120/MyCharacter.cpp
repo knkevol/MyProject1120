@@ -109,11 +109,11 @@ void AMyCharacter::ReloadWeapon()
 
 void AMyCharacter::DoFire()
 {
-	//AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
-	//if (ChildWeapon)
-	//{
-	//	ChildWeapon->Fire();
-	//}
+	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
+	if (ChildWeapon)
+	{
+		ChildWeapon->Fire();
+	}
 
 	APlayerController* PC = Cast<APlayerController>(GetController());
 	if (PC)
@@ -178,10 +178,31 @@ void AMyCharacter::DoFire()
 
 }
 
-float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+void AMyCharacter::DoDeadEnd()
 {
-	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	GetController()->SetActorEnableCollision(false);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	GetMesh()->SetSimulatePhysics(true);
+}
 
+void AMyCharacter::DoDead()
+{
+	//네트워크를 위해 DoDeadEnd와 분리
+	TArray<FName> DeathMontageList;
+	DeathMontageList.Add(TEXT("Back"));
+	DeathMontageList.Add(TEXT("Front"));
+	DeathMontageList.Add(TEXT("Front2"));
+	DeathMontageList.Add(TEXT("Front3"));
+	DeathMontageList.Add(TEXT("Left"));
+	DeathMontageList.Add(TEXT("Right"));
+	int32 RandDeathListNum = FMath::RandRange(0, DeathMontageList.Num() - 1);
+
+	PlayAnimMontage(DeathMontage, 1.0f, DeathMontageList[RandDeathListNum]);
+	UE_LOG(LogTemp, Warning, TEXT("DoDead"));
+}
+
+void AMyCharacter::DoHit()
+{
 	TArray<FName> HitMontageList;
 	HitMontageList.Add(TEXT("BackMed"));
 	HitMontageList.Add(TEXT("FrontHvy"));
@@ -192,16 +213,18 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	HitMontageList.Add(TEXT("FrontMed"));
 	HitMontageList.Add(TEXT("FrontMed2"));
 	int32 RandHitListNum = FMath::RandRange(0, HitMontageList.Num() - 1);
-	
-	TArray<FName> DeathMontageList;
-	DeathMontageList.Add(TEXT("Back"));
-	DeathMontageList.Add(TEXT("Front"));
-	DeathMontageList.Add(TEXT("Front2"));
-	DeathMontageList.Add(TEXT("Front3"));
-	DeathMontageList.Add(TEXT("Left"));
-	DeathMontageList.Add(TEXT("Right"));
-	int32 RandDeathListNum = FMath::RandRange(0, DeathMontageList.Num() - 1);
 
+	PlayAnimMontage(HitMontage, 1.0f, HitMontageList[RandHitListNum]);
+}
+
+float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	if (CurHp <= 0)
+	{
+		return DamageAmount;
+	}
 
 	//데미지 종류에 맞게 데미지 작업
 	if (DamageEvent.IsOfType(FPointDamageEvent::ClassID))
@@ -209,8 +232,8 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		FPointDamageEvent* Event = (FPointDamageEvent*)(&DamageEvent);
 		if (Event)
 		{
+			DoHit();
 			CurHp -= DamageAmount;
-			PlayAnimMontage(HitMontage, 1.0f, HitMontageList[RandHitListNum]);
 			UE_LOG(LogTemp, Warning, TEXT("Point Damage : %f %s"), DamageAmount, *(Event->HitInfo.BoneName.ToString()));
 			UE_LOG(LogTemp, Warning, TEXT("Point CurHp : %f"), CurHp);
 		}
@@ -236,8 +259,7 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	if (CurHp <= 0)
 	{
 		//Death Montage
-		PlayAnimMontage(DeathMontage, 1.0f, DeathMontageList[RandDeathListNum]);
-		GetMesh()->SetSimulatePhysics(true);
+		DoDead();
 	}
 
 

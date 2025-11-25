@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotify.h"
-#include "MyAnimNotify_StepSound.generated.h"
+#include "AnimNotify_StepSound.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MYPROJECT1120_API UMyAnimNotify_StepSound : public UAnimNotify
+class MYPROJECT1120_API UAnimNotify_StepSound : public UAnimNotify
 {
 	GENERATED_BODY()
 
