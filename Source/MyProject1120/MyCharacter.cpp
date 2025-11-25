@@ -123,7 +123,7 @@ void AMyCharacter::DoFire()
 		int32 CenterX = 0;
 		int32 CenterY = 0;
 		FVector WorldDirection;
-		FVector WorldPosition;
+		FVector WorldLocation;
 		FVector CameraLocation;
 		FRotator CameraRotation;
 		
@@ -132,7 +132,7 @@ void AMyCharacter::DoFire()
 		CenterY = SizeY / 2;
 
 		
-		PC->DeprojectScreenPositionToWorld((float)CenterX, (float)CenterY, WorldDirection, WorldPosition);
+		PC->DeprojectScreenPositionToWorld((float)CenterX, (float)CenterY, WorldLocation, WorldDirection);
 		PC->GetPlayerViewPoint(CameraLocation, CameraRotation);
 
 		FVector Start = CameraLocation;
@@ -168,6 +168,8 @@ void AMyCharacter::DoFire()
 			UGameplayStatics::ApplyDamage(HitResult.GetActor(), 50, GetController(), this, UDamageTypeBase::StaticClass());
 			//총
 			//UGameplayStatics::ApplyPointDamage(HitResult.GetActor(), 50, -HitResult.ImpactNormal, HitResult, GetController(), this, UDamageTypeBase::StaticClass());
+			//범위, 수류탄
+			//UGameplayStatics::ApplyRadialDamage(HitResult.GetActor(),50, HitResult.ImpactPoint, 300.0f, UDamageTypeBase::StaticClass(), IgnoreActors,	this, GetController(), true);
 			UE_LOG(LogTemp, Warning, TEXT("HitObject : %s"), *HitResult.GetActor()->GetName());
 		}
 	}
@@ -180,20 +182,33 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	//데미지 종류에 맞게 데미지 작업
-	if (DamageEvent.IsOfType(FDamageEvent::ClassID))
+	
+	if (DamageEvent.IsOfType(FPointDamageEvent::ClassID))
 	{
-
-	}
-	else if (DamageEvent.IsOfType(FPointDamageEvent::ClassID))
-	{
-
+		FPointDamageEvent* Event = (FPointDamageEvent*)(&DamageEvent);
+		if (Event)
+		{
+			CurHp -= DamageAmount;
+			UE_LOG(LogTemp, Warning, TEXT("Point Damage : %f %s"), DamageAmount, *(Event->HitInfo.BoneName.ToString()));
+		}
 	}
 	else if (DamageEvent.IsOfType(FRadialDamageEvent::ClassID))
 	{
+		FRadialDamageEvent* Event = (FRadialDamageEvent*)(&DamageEvent);
+		if (Event)
+		{
+			CurHp -= DamageAmount;
 
+			UE_LOG(LogTemp, Warning, TEXT("Radial Damage %f %s"), DamageAmount, *Event->DamageTypeClass->GetName());
+		}
+	}
+	else //(DamageEvent.IsOfType(FDamageEvent::ClassID))
+	{
+		CurHp -= DamageAmount;
+		UE_LOG(LogTemp, Warning, TEXT("Damage : %f"), DamageAmount);
 	}
 
-	CurHp -= DamageAmount;
+	
 
 	if (CurHp <= 0)
 	{
