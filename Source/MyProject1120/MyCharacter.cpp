@@ -12,6 +12,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Weapon/DamageTypeBase.h"
 #include "Engine/DamageEvents.h"
+#include "Kismet/KismetArrayLibrary.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -181,14 +182,35 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	//데미지 종류에 맞게 데미지 작업
+	TArray<FName> HitMontageList;
+	HitMontageList.Add(TEXT("BackMed"));
+	HitMontageList.Add(TEXT("FrontHvy"));
+	HitMontageList.Add(TEXT("FrontLgt"));
+	HitMontageList.Add(TEXT("FrontLgt2"));
+	HitMontageList.Add(TEXT("FrontLgt3"));
+	HitMontageList.Add(TEXT("FrontLgt4"));
+	HitMontageList.Add(TEXT("FrontMed"));
+	HitMontageList.Add(TEXT("FrontMed2"));
+	int32 RandHitListNum = FMath::RandRange(0, HitMontageList.Num() - 1);
 	
+	TArray<FName> DeathMontageList;
+	DeathMontageList.Add(TEXT("Back"));
+	DeathMontageList.Add(TEXT("Front"));
+	DeathMontageList.Add(TEXT("Front2"));
+	DeathMontageList.Add(TEXT("Front3"));
+	DeathMontageList.Add(TEXT("Left"));
+	DeathMontageList.Add(TEXT("Right"));
+	int32 RandDeathListNum = FMath::RandRange(0, DeathMontageList.Num() - 1);
+
+
+	//데미지 종류에 맞게 데미지 작업
 	if (DamageEvent.IsOfType(FPointDamageEvent::ClassID))
 	{
 		FPointDamageEvent* Event = (FPointDamageEvent*)(&DamageEvent);
 		if (Event)
 		{
 			CurHp -= DamageAmount;
+			PlayAnimMontage(HitMontage, 1.0f, HitMontageList[RandHitListNum]);
 			UE_LOG(LogTemp, Warning, TEXT("Point Damage : %f %s"), DamageAmount, *(Event->HitInfo.BoneName.ToString()));
 		}
 	}
@@ -206,13 +228,15 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 	{
 		CurHp -= DamageAmount;
 		UE_LOG(LogTemp, Warning, TEXT("Damage : %f"), DamageAmount);
+		UE_LOG(LogTemp, Warning, TEXT("CurHp : %f"), CurHp);
 	}
 
-	
 
 	if (CurHp <= 0)
 	{
 		//Death Montage
+		PlayAnimMontage(DeathMontage, 1.0f, DeathMontageList[RandDeathListNum]);
+		GetMesh()->SetSimulatePhysics(true);
 	}
 
 
