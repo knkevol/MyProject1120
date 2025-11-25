@@ -25,6 +25,7 @@ void UMyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		State = Character->State;
 		bCrouch = Character->bCrouch;
 		bIsCrouched = Character->bIsCrouched;
+		bIsFalling = Character->GetCharacterMovement()->IsFalling();
 
 		float TargetLeanAngle = 0;
 		if (bLeanL)
