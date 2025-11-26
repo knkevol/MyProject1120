@@ -9,6 +9,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class UInputAction;
+class APickupItemBase;
 
 UENUM(BlueprintType)
 enum class EState : uint8
@@ -81,8 +82,20 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void DoHit();
 
+	UFUNCTION(BlueprintCallable)
+	void StartZoom();
+
+	UFUNCTION(BlueprintCallable)
+	void StopZoom();
+
 	UFUNCTION()
 	void ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
+
+	void EquipItem(APickupItemBase* PickedItem);
+
+	void UseItem(APickupItemBase* PickedItem);
+
+	void EatItem(APickupItemBase* PickedItem);
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
@@ -96,6 +109,12 @@ public:
 	uint8 bAiming : 1;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	uint8 bCrouch : 1;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	uint8 bIsInfinity : 1;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	uint8 bIsZoom : 1 = false;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	float CurHp = 100;
@@ -120,5 +139,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
 	TObjectPtr<UInputAction> IA_Fire;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
+	TObjectPtr<UInputAction> IA_Zoom;
 
 };

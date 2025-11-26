@@ -62,6 +62,8 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		UIC->BindAction(IA_Reload, ETriggerEvent::Completed, this, &AMyCharacter::Reload);
 		UIC->BindAction(IA_Fire, ETriggerEvent::Started, this, &AMyCharacter::StartFire);
 		UIC->BindAction(IA_Fire, ETriggerEvent::Completed, this, &AMyCharacter::StopFire);
+		UIC->BindAction(IA_Zoom, ETriggerEvent::Started, this, &AMyCharacter::StartZoom);
+		UIC->BindAction(IA_Zoom, ETriggerEvent::Completed, this, &AMyCharacter::StopZoom);
 	}
 
 }
@@ -173,6 +175,17 @@ void AMyCharacter::DoHit()
 	PlayAnimMontage(HitMontage, 1.0f, HitMontageList[RandHitListNum]);
 }
 
+void AMyCharacter::StartZoom()
+{
+	bIsZoom = true;
+}
+
+void AMyCharacter::StopZoom()
+{
+	bIsZoom = false;
+}
+
+
 void AMyCharacter::ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
 	APickupItemBase* PickedItem = Cast<APickupItemBase>(OtherActor);
@@ -184,18 +197,91 @@ void AMyCharacter::ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherAct
 		//SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 		//SpawnParams.TransformScaleMethod = ESpawnActorScaleMethod::MultiplyWithRoot;
 
-		Weapon->SetChildActorClass(PickedItem->ItemTemplate);
-		AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
-		//장착하는 아이템인지 예외처리 필요
-		if (ChildWeapon)
+		switch (PickedItem->ItemType)
+		{
+		case EItemType::Use:
+			UseItem(PickedItem);
+			break;
+		case EItemType::Eat:
+			EatItem(PickedItem);
+			break;
+		case EItemType::Equip:
+			EquipItem(PickedItem);
+			break;
+		}
+
+		//if (!PickedItem->bIsInfinity)
+		//{
+		//	PickedItem->Destroy();
+
+		//}
+		
+
+		
+	}
+}
+
+void AMyCharacter::EquipItem(APickupItemBase* PickedItem)
+{
+	Weapon->SetChildActorClass(PickedItem->ItemTemplate);
+	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
+	//장착하는 아이템인지 예외처리 필요
+	if (ChildWeapon)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("AMyCharacter::EquipItem"));
+		ChildWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, ChildWeapon->SocketName);
+		State = EState::Pistol;
+		ChildWeapon->SetOwner(this);
+		if (ChildWeapon->Name.Compare(TEXT("Pistol")) == 0)
 		{
 			ChildWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, ChildWeapon->SocketName);
 			State = EState::Pistol;
-			//State = EState::Rifle;
-			//State = EState::Launcher;
 			ChildWeapon->SetOwner(this);
 		}
+		else if (ChildWeapon->Name.Compare(TEXT("Rifle")) == 0)
+		{
+			ChildWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, ChildWeapon->SocketName);
+			State = EState::Rifle;
+			ChildWeapon->SetOwner(this);
+		}
+		else if (ChildWeapon->Name.Compare(TEXT("Launcher")) == 0)
+		{
+			ChildWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, ChildWeapon->SocketName);
+			State = EState::Launcher;
+			ChildWeapon->SetOwner(this);
+		}
+		
 	}
+}
+
+void AMyCharacter::UseItem(APickupItemBase* PickedItem)
+{
+	//Weapon->SetChildActorClass(PickedItem->ItemTemplate);
+	//AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
+	////장착하는 아이템인지 예외처리 필요
+	//if (ChildWeapon)
+	//{
+	//	ChildWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, ChildWeapon->SocketName);
+	//	State = EState::Pistol;
+	//	//State = EState::Rifle;
+	//	//State = EState::Launcher;
+	//	ChildWeapon->SetOwner(this);
+	//}
+}
+
+void AMyCharacter::EatItem(APickupItemBase* PickedItem)
+{
+	//Weapon->SetChildActorClass(PickedItem->ItemTemplate);
+	//AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
+	////장착하는 아이템인지 예외처리 필요
+	//if (ChildWeapon)
+	//{
+	//	ChildWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, ChildWeapon->SocketName);
+	//	State = EState::Pistol;
+	//	//State = EState::Rifle;
+	//	//State = EState::Launcher;
+	//	ChildWeapon->SetOwner(this);
+	//}
 }
 
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

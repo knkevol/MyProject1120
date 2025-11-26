@@ -59,6 +59,9 @@ public:
 	FName SocketName = TEXT("HandGrip_R");
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
+	FName Name;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
 	int32 MaxBullet = 100;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
