@@ -15,13 +15,15 @@ void APCMBase::UpdateCamera(float DeltaTime)
 	AMyCharacter* Pawn = Cast<AMyCharacter>(GetOwningPlayerController()->GetPawn());
 	if (Pawn)
 	{
+		float TargetFOV = Pawn->bIsZoom ? ZoomFOV : NormalFOV;
+		float CurrentFOV = FMath::FInterpTo(GetFOVAngle(), TargetFOV, DeltaTime, ZoomSpeed);
 		if (Pawn->bIsZoom)
 		{
-			SetFOV(60.0f);
+			SetFOV(CurrentFOV);
 		}
 		else
 		{
-			SetFOV(90.f);
+			SetFOV(TargetFOV);
 		}
 	}
 }

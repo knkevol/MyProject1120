@@ -10,6 +10,7 @@
 #include "Engine/DamageEvents.h"
 #include "GameFramework/Character.h"
 #include "TimerManager.h"
+#include "ProjectileBase.h"
 
 
 // Sets default values
@@ -63,10 +64,9 @@ void AWeaponBase::Fire()
 	{
 		return;
 	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("AWeaponBase::Fire() _ Character"));
-	}
+	
+	FTransform SpawnTransform = Mesh->GetSocketTransform(TEXT("Muzzle"));
+	GetWorld()->SpawnActor<AProjectileBase>(ProjectileTemplate, SpawnTransform);
 
 
 	APlayerController* PC = Cast<APlayerController>(Character->GetController());
@@ -100,6 +100,7 @@ void AWeaponBase::Fire()
 		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_PhysicsBody));
 
 		TArray<AActor*> IngnoreActors;
+		IngnoreActors.Add(Character);
 		FHitResult HitResult;
 
 		bool bResult = UKismetSystemLibrary::LineTraceSingleForObjects(

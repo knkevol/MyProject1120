@@ -111,9 +111,6 @@ public:
 	uint8 bCrouch : 1;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
-	uint8 bIsInfinity : 1;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	uint8 bIsZoom : 1 = false;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")

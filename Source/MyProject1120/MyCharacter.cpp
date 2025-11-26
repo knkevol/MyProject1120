@@ -210,11 +210,10 @@ void AMyCharacter::ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherAct
 			break;
 		}
 
-		//if (!PickedItem->bIsInfinity)
-		//{
-		//	PickedItem->Destroy();
-
-		//}
+		if (!PickedItem->bIsInfinity)
+		{
+			PickedItem->Destroy();
+		}
 		
 
 		

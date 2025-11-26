@@ -46,4 +46,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1126")
 	TSubclassOf<class AItemBase> ItemTemplate;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1126")
+	uint8 bIsInfinity : 1 = false;
+
 };

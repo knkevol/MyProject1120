@@ -18,5 +18,14 @@ public:
 	APCMBase();
 
 	virtual void UpdateCamera(float DeltaTime) override;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1126")
+	float NormalFOV = 90.0f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1126")
+	float ZoomFOV = 60.0f;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1126")
+	float ZoomSpeed = 15.0f;
 	
 };
