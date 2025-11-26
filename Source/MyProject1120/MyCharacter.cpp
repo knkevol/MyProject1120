@@ -13,6 +13,7 @@
 #include "Weapon/DamageTypeBase.h"
 #include "Engine/DamageEvents.h"
 #include "Kismet/KismetArrayLibrary.h"
+#include "PickupItemBase.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -36,14 +37,10 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//무기 집으면 잡게 이동
-	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
-	if (ChildWeapon)
-	{
-		ChildWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, ChildWeapon->SocketName);
-		State = EState::Pistol;
-		ChildWeapon->SetOwner(this);
-	}
+	//델리게이트 바인딩
+	OnActorBeginOverlap.AddDynamic(this, &AMyCharacter::ProcessBeginOverlap);
+
+	
 	
 }
 
@@ -115,6 +112,7 @@ void AMyCharacter::DoFire()
 	if (ChildWeapon)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("AMyCharacter::DoFire()"));
+		PlayAnimMontage(ChildWeapon->FireMontage);
 		ChildWeapon->Fire();
 	}
 }
@@ -173,6 +171,31 @@ void AMyCharacter::DoHit()
 	int32 RandHitListNum = FMath::RandRange(0, HitMontageList.Num() - 1);
 
 	PlayAnimMontage(HitMontage, 1.0f, HitMontageList[RandHitListNum]);
+}
+
+void AMyCharacter::ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
+{
+	APickupItemBase* PickedItem = Cast<APickupItemBase>(OtherActor);
+	if (PickedItem)
+	{
+		//FActorSpawnParameters SpawnParams;
+		//SpawnParams.Owner = this;
+		//SpawnParams.Instigator = this;
+		//SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		//SpawnParams.TransformScaleMethod = ESpawnActorScaleMethod::MultiplyWithRoot;
+
+		Weapon->SetChildActorClass(PickedItem->ItemTemplate);
+		AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
+		//장착하는 아이템인지 예외처리 필요
+		if (ChildWeapon)
+		{
+			ChildWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, ChildWeapon->SocketName);
+			State = EState::Pistol;
+			//State = EState::Rifle;
+			//State = EState::Launcher;
+			ChildWeapon->SetOwner(this);
+		}
+	}
 }
 
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

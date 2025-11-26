@@ -15,7 +15,8 @@ enum class EState : uint8
 {
 	Unarmed = 0 UMETA(DisplayName = "Unarmed"),
 	Pistol = 10 UMETA(DisplayName = "Pistol"),
-	Rifle = 20 UMETA(DisplayName = "Rifle")
+	Rifle = 20 UMETA(DisplayName = "Rifle"),
+	Launcher = 30 UMETA(DisplayName = "Launcher")
 };
 
 UCLASS()
@@ -79,6 +80,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void DoHit();
+
+	UFUNCTION()
+	void ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
