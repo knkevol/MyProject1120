@@ -229,9 +229,11 @@ void AMyCharacter::EquipItem(APickupItemBase* PickedItem)
 	if (ChildWeapon)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("AMyCharacter::EquipItem"));
+		ChildWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, ChildWeapon->SocketName);
+		State = EState::Pistol;
+		ChildWeapon->SetOwner(this);
 		if (ChildWeapon->Name.Compare(TEXT("Pistol")) == 0)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("AMyCharacter::EquipItem_Pistol"));
 			ChildWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, ChildWeapon->SocketName);
 			State = EState::Pistol;
 			ChildWeapon->SetOwner(this);
