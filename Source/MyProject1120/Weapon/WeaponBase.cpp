@@ -101,7 +101,7 @@ void AWeaponBase::Fire()
 		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_PhysicsBody));
 
 		TArray<AActor*> IngnoreActors;
-		//IngnoreActors.Add(GetOwner());
+		IngnoreActors.Add(GetOwner());
 		FHitResult HitResult;
 
 		bool bResult = UKismetSystemLibrary::LineTraceSingleForObjects(
@@ -129,13 +129,15 @@ void AWeaponBase::Fire()
 
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlash, SpawnLocation, AimRotation);
 
-		if (HitResult.GetActor() == Character)
+		ACharacter* HitCharacter = Cast<ACharacter>(HitResult.GetActor());
+		if (HitCharacter)
 		{
-			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), 
-				BloodEffect, 
-				HitResult.ImpactPoint, 
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),
+				BloodEffect,
+				HitResult.ImpactPoint,
 				HitResult.ImpactNormal.Rotation());
 		}
+		
 
 		//쏘고 총구 위치 위로 = Recoil
 		Character->AddControllerPitchInput(-0.5f);
