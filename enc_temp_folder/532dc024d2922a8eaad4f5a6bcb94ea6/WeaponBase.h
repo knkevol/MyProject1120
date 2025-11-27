@@ -41,9 +41,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Component)
 	TObjectPtr<UParticleSystem> MuzzleFlash;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Component)
-	TObjectPtr<UParticleSystem> BloodEffect;
-
 	UFUNCTION(BlueprintCallable)
 	void Reload();
 
