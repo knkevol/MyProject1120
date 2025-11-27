@@ -4,8 +4,6 @@
 #include "MyCharacter_Zombie.h"
 #include "Engine/DamageEvents.h"
 #include "Kismet/GameplayStatics.h"
-#include "Kismet/KismetMathLibrary.h"
-
 
 // Sets default values
 AMyCharacter_Zombie::AMyCharacter_Zombie()
@@ -26,16 +24,6 @@ void AMyCharacter_Zombie::BeginPlay()
 void AMyCharacter_Zombie::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-
-	//Chase
-	APawn* TargetPawn = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn();
-
-	FVector Direction = TargetPawn->GetActorLocation() - GetActorLocation();
-	AddMovementInput(Direction, 1);
-
-	FRotator Rotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetPawn->GetActorLocation());
-	SetActorRotation(Rotation);
 
 }
 
