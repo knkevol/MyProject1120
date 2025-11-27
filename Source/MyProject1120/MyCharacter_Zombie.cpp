@@ -11,7 +11,7 @@
 AMyCharacter_Zombie::AMyCharacter_Zombie()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 }
 
@@ -27,15 +27,28 @@ void AMyCharacter_Zombie::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//switch (CurState)
+	//{
+	//case EZombieState::Normal:
+	//	break;
+	//case EZombieState::Chase:
+	//	break;
+	//case EZombieState::Battle:
+	//	break;
+	//case EZombieState::Death:
+	//	break;
+	//default:
+	//	break;
+	//}
 
-	//Chase
-	APawn* TargetPawn = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn();
+	////Chase
+	//APawn* TargetPawn = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn();
 
-	FVector Direction = TargetPawn->GetActorLocation() - GetActorLocation();
-	AddMovementInput(Direction, 1);
+	//FVector Direction = TargetPawn->GetActorLocation() - GetActorLocation();
+	//AddMovementInput(Direction, 1);
 
-	FRotator Rotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetPawn->GetActorLocation());
-	SetActorRotation(Rotation);
+	//FRotator Rotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetPawn->GetActorLocation());
+	//SetActorRotation(Rotation);
 
 }
 
