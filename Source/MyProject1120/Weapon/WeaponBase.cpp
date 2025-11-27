@@ -116,18 +116,20 @@ void AWeaponBase::Fire()
 			true
 		);
 		
-
+		//Calculate
 		FVector SpawnLocation = Mesh->GetSocketLocation(TEXT("Muzzle"));
 		FVector TargetLocation = bResult ? HitResult.ImpactPoint : End;
 		FVector BulletDirection = (TargetLocation - SpawnLocation).GetSafeNormal();
 
 		//UKismetMathLibrary::RandomUnitVector() 랜덤방향 벡터생성 = 총흔들리는정도
 		FRotator AimRotation = UKismetMathLibrary::FindLookAtRotation(SpawnLocation, TargetLocation + (UKismetMathLibrary::RandomUnitVector() * 0.3));
-		FTransform SpawnTransform(AimRotation, SpawnLocation, FVector::OneVector);
+		
+		
+		FireProjectile(FTransform(AimRotation, SpawnLocation, FVector::OneVector), HitResult);
 
-		GetWorld()->SpawnActor<AProjectileBase>(ProjectileTemplate, SpawnTransform);
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlash, SpawnLocation, AimRotation);
 
-		//쏘고 총구 위치 위로
+		//쏘고 총구 위치 위로 = Recoil
 		Character->AddControllerPitchInput(-0.5f);
 
 	}
@@ -142,11 +144,14 @@ void AWeaponBase::Fire()
 
 void AWeaponBase::StopFire()
 {
-	//GetWorld()->
+	GetWorld()->GetTimerManager().ClearTimer(RefireTimer);
 }
 
-void AWeaponBase::FireProjectile()
+void AWeaponBase::FireProjectile(FTransform SpawnTransform, FHitResult InHitResult)
 {
-	GetWorld()->GetTimerManager().ClearTimer(RefireTimer);
+
+	AProjectileBase* Projectile = GetWorld()->SpawnActor<AProjectileBase>(ProjectileTemplate, SpawnTransform);
+	Projectile->HitResult = InHitResult;
+	
 }
 

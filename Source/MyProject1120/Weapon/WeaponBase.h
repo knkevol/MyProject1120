@@ -38,6 +38,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Component)
 	TObjectPtr<UAnimMontage> ReloadMontage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Component)
+	TObjectPtr<UParticleSystem> MuzzleFlash;
+
 	UFUNCTION(BlueprintCallable)
 	void Reload();
 
@@ -48,7 +51,7 @@ public:
 	void StopFire();
 
 	UFUNCTION(BlueprintCallable)
-	void FireProjectile();
+	void FireProjectile(FTransform SpawnTransform, FHitResult InHitResult);
 
 	
 
