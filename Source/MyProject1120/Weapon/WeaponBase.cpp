@@ -127,18 +127,7 @@ void AWeaponBase::Fire()
 		
 		FireProjectile(FTransform(AimRotation, SpawnLocation, FVector::OneVector), HitResult);
 
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlash, SpawnLocation, AimRotation);
-
-		// Hit
-		/*ACharacter* HitCharacter = Cast<ACharacter>(HitResult.GetActor());
-		if (HitCharacter)
-		{
-			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),
-				BloodEffect,
-				HitResult.ImpactPoint,
-				HitResult.ImpactNormal.Rotation());
-		}*/
-		
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlash, SpawnLocation, AimRotation);		
 
 		// Recoil
 		Character->AddControllerPitchInput(-0.5f);
