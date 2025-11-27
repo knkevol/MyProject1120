@@ -47,10 +47,10 @@ void AProjectileBase::Tick(float DeltaTime)
 void AProjectileBase::ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
 
-	UDecalComponent* MadeDecal = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), Decal, FVector(15, 15, 15), 
+	UDecalComponent* MadeDecal = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), Decal, FVector(5, 5, 5), 
 		HitResult.ImpactPoint, HitResult.ImpactNormal.Rotation(), 5.f);
 
-	MadeDecal->SetFadeScreenSize(0.005f);
+	//MadeDecal->SetFadeScreenSize(0.005f);
 	
 	//RPG 
 			//UGameplayStatics::ApplyDamage(HitResult.GetActor(),
