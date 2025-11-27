@@ -121,7 +121,7 @@ void AWeaponBase::Fire()
 		FVector TargetLocation = bResult ? HitResult.ImpactPoint : End;
 		FVector BulletDirection = (TargetLocation - SpawnLocation).GetSafeNormal();
 
-		//UKismetMathLibrary::RandomUnitVector() 랜덤방향 벡터생성 = 총흔들리는정도
+		
 		FRotator AimRotation = UKismetMathLibrary::FindLookAtRotation(SpawnLocation, TargetLocation + (UKismetMathLibrary::RandomUnitVector() * 0.3));
 		
 		
@@ -129,6 +129,7 @@ void AWeaponBase::Fire()
 
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlash, SpawnLocation, AimRotation);
 
+		// Hit
 		ACharacter* HitCharacter = Cast<ACharacter>(HitResult.GetActor());
 		if (HitCharacter)
 		{
@@ -139,7 +140,7 @@ void AWeaponBase::Fire()
 		}
 		
 
-		//쏘고 총구 위치 위로 = Recoil
+		// Recoil
 		Character->AddControllerPitchInput(-0.5f);
 
 	}
