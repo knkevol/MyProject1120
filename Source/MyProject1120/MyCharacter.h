@@ -99,6 +99,9 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
+	UFUNCTION(BlueprintCallable)
+	virtual void SpawnHitEffect(FHitResult Hit);
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	uint8 bSpirnt : 1;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
@@ -139,5 +142,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
 	TObjectPtr<UInputAction> IA_Zoom;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1127")
+	TObjectPtr<UParticleSystem> BloodEffect;
+
 
 };

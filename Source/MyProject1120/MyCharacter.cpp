@@ -14,6 +14,7 @@
 #include "Engine/DamageEvents.h"
 #include "Kismet/KismetArrayLibrary.h"
 #include "PickupItemBase.h"
+#include "Components/DecalComponent.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -300,6 +301,8 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 			CurHp -= DamageAmount;
 			UE_LOG(LogTemp, Warning, TEXT("Point Damage : %f %s"), DamageAmount, *(Event->HitInfo.BoneName.ToString()));
 			UE_LOG(LogTemp, Warning, TEXT("Point CurHp : %f"), CurHp);
+
+			SpawnHitEffect(Event->HitInfo);
 		}
 	}
 	else if (DamageEvent.IsOfType(FRadialDamageEvent::ClassID))
@@ -328,4 +331,17 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 
 
 	return 0.0f;
+}
+
+void AMyCharacter::SpawnHitEffect(FHitResult Hit)
+{
+	if (BloodEffect)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),
+			BloodEffect,
+			Hit.ImpactPoint,
+			Hit.ImpactNormal.Rotation());
+
+	}
+	
 }

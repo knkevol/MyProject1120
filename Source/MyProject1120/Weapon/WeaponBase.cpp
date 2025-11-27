@@ -130,14 +130,14 @@ void AWeaponBase::Fire()
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlash, SpawnLocation, AimRotation);
 
 		// Hit
-		ACharacter* HitCharacter = Cast<ACharacter>(HitResult.GetActor());
+		/*ACharacter* HitCharacter = Cast<ACharacter>(HitResult.GetActor());
 		if (HitCharacter)
 		{
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),
 				BloodEffect,
 				HitResult.ImpactPoint,
 				HitResult.ImpactNormal.Rotation());
-		}
+		}*/
 		
 
 		// Recoil
@@ -163,6 +163,7 @@ void AWeaponBase::FireProjectile(FTransform SpawnTransform, FHitResult InHitResu
 
 	AProjectileBase* Projectile = GetWorld()->SpawnActor<AProjectileBase>(ProjectileTemplate, SpawnTransform);
 	Projectile->HitResult = InHitResult;
+	Projectile->SetOwner(this);
 	
 }
 
