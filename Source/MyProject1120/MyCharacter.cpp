@@ -139,6 +139,7 @@ void AMyCharacter::StopFire()
 
 void AMyCharacter::DoDeadEnd()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Character_DoDeadEnd"));
 	GetController()->SetActorEnableCollision(false);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	GetMesh()->SetSimulatePhysics(true);

@@ -111,7 +111,7 @@ void AWeaponBase::Fire()
 			ObjectTypes,
 			true,
 			IngnoreActors,
-			EDrawDebugTrace::None,
+			EDrawDebugTrace::ForOneFrame,
 			HitResult,
 			true
 		);
