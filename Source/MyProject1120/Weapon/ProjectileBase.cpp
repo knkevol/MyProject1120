@@ -81,17 +81,18 @@ void AProjectileBase::ProcessComponentHit(UPrimitiveComponent* HitComponent, AAc
 {
 
 	SpawnHitEffect(Hit);
-
 	APawn* Pawn = Cast<APawn>(GetOwner()->GetOwner());
-	//ÃÑ µ¥¹ÌÁö
-	UGameplayStatics::ApplyPointDamage(HitResult.GetActor(),
-		Damage,
-		-HitResult.ImpactNormal,
-		HitResult,
-		Pawn->GetController(),
-		this,
-		UDamageTypeBase::StaticClass()
-	);
+	if (Pawn)
+	{
+		//ÃÑ µ¥¹ÌÁö
+		UGameplayStatics::ApplyPointDamage(HitResult.GetActor(),
+			Damage,
+			-HitResult.ImpactNormal,
+			HitResult,
+			Pawn->GetController(),
+			this,
+			UDamageTypeBase::StaticClass());
+	}
 }
 
 void AProjectileBase::SpawnHitEffect(FHitResult Hit)

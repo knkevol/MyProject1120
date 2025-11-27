@@ -52,7 +52,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1127")
 	float MaxHp = 100;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1127")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
 	TObjectPtr<UAnimMontage> DeathMontage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1127")

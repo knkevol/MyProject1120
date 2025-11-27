@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "MyCharacter_Zombie.h"
 #include "MyAnimInstance_Zombie.generated.h"
 
 /**
@@ -25,6 +26,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1127")
 	uint8 bIsDeath : 1;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1127")
+	EZombieState CurState;
 
 	
 };
