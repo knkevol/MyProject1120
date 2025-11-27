@@ -115,7 +115,6 @@ void AWeaponBase::Fire()
 			HitResult,
 			true
 		);
-		
 
 		FVector SpawnLocation = Mesh->GetSocketLocation(TEXT("Muzzle"));
 		FVector TargetLocation = bResult ? HitResult.ImpactPoint : End;
