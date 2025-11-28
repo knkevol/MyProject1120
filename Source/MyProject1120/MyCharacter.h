@@ -10,6 +10,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UInputAction;
 class APickupItemBase;
+class UAIPerceptionStimuliSourceComponent;
 
 UENUM(BlueprintType)
 enum class EState : uint8
@@ -145,6 +146,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1127")
 	TObjectPtr<UParticleSystem> BloodEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1128")
+	TObjectPtr<UAIPerceptionStimuliSourceComponent> StimuliSource;
 
 
 };

@@ -15,6 +15,7 @@
 #include "Kismet/KismetArrayLibrary.h"
 #include "PickupItemBase.h"
 #include "Components/DecalComponent.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -30,6 +31,8 @@ AMyCharacter::AMyCharacter()
 
 	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(GetMesh());
+
+	StimuliSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("StimuliSource"));
 
 }
 
