@@ -69,8 +69,6 @@ void AZombieAIController::ProcessActorPerception(AActor* Actor, FAIStimulus Stim
 		{
 			
 			Blackboard->SetValueAsObject(TEXT("Target"), Player);
-			Blackboard->SetValueAsEnum(TEXT("CurState"), (uint8)(EZombieState::Chase));
-
 			Zombie->SetState(EZombieState::Chase);
 		}
 	}
@@ -86,7 +84,6 @@ void AZombieAIController::ProcessPerceptionForget(AActor* Actor)
 	{
 
 		Blackboard->SetValueAsObject(TEXT("Target"), nullptr);
-		Blackboard->SetValueAsEnum(TEXT("CurState"), (uint8)(EZombieState::Normal));
 		Zombie->SetState(EZombieState::Normal);
 	}
 }
