@@ -34,7 +34,7 @@ AMyCharacter::AMyCharacter()
 
 	StimuliSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("StimuliSource"));
 
-	TeamID = 1;
+	SetGenericTeamId(1);
 }
 
 // Called when the game starts or when spawned
