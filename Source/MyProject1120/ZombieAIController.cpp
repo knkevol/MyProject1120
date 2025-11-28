@@ -14,8 +14,8 @@ AZombieAIController::AZombieAIController()
 	Perception = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception"));
 
 	UAISenseConfig_Sight* Sight = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight"));
-	Sight->SightRadius = 300.0f;
-	Sight->LoseSightRadius = 400.0f;
+	Sight->SightRadius = 500.0f;
+	Sight->LoseSightRadius = 600.0f;
 	Sight->PeripheralVisionAngleDegrees = 45.0f; //ÇÑÂÊ´«±âÁØ
 	Sight->DetectionByAffiliation.bDetectEnemies = true;
 	Sight->DetectionByAffiliation.bDetectFriendlies = false;
@@ -72,6 +72,7 @@ void AZombieAIController::ProcessActorPerception(AActor* Actor, FAIStimulus Stim
 			Blackboard->SetValueAsEnum(TEXT("CurState"), (uint8)(EZombieState::Chase));
 
 			Zombie->SetState(EZombieState::Chase);
+			Zombie->ChangeSpeed(400.0f);
 		}
 	}
 }
@@ -88,6 +89,7 @@ void AZombieAIController::ProcessPerceptionForget(AActor* Actor)
 		Blackboard->SetValueAsObject(TEXT("Target"), nullptr);
 		Blackboard->SetValueAsEnum(TEXT("CurState"), (uint8)(EZombieState::Normal));
 		Zombie->SetState(EZombieState::Normal);
+		Zombie->ChangeSpeed(80.0f);
 	}
 }
 

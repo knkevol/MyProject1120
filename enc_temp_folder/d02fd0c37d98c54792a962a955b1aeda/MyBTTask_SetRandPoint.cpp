@@ -7,7 +7,6 @@
 #include "NavigationSystem.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
-
 UMyBTTask_SetRandPoint::UMyBTTask_SetRandPoint()
 {
 	NodeName = "SetRandPoint";

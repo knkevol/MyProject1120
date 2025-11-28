@@ -60,7 +60,4 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1127")
 	TObjectPtr<UParticleSystem> BloodEffect;
 
-	UFUNCTION(BlueprintCallable)
-	void ChangeSpeed(float NewMaxSpeed);
-
 };

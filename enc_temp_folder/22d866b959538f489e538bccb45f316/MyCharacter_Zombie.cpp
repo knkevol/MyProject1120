@@ -5,7 +5,7 @@
 #include "Engine/DamageEvents.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "GameFramework/CharacterMovementComponent.h"
+
 
 // Sets default values
 AMyCharacter_Zombie::AMyCharacter_Zombie()
@@ -142,9 +142,4 @@ void AMyCharacter_Zombie::SpawnHitEffect(FHitResult Hit)
 void AMyCharacter_Zombie::SetState(EZombieState NewState)
 {
 	CurState = NewState;
-}
-
-void AMyCharacter_Zombie::ChangeSpeed(float NewMaxSpeed)
-{
-	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
 }
