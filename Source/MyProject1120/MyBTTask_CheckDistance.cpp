@@ -12,7 +12,7 @@ UMyBTTask_CheckDistance::UMyBTTask_CheckDistance()
 
 EBTNodeResult::Type UMyBTTask_CheckDistance::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	AActor* Player = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(TEXT("Player")));
+	AActor* Player = Cast<AActor>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(TEXT("Target")));
 	AMyCharacter_Zombie* Zombie = Cast<AMyCharacter_Zombie>(OwnerComp.GetAIOwner()->GetPawn());
 	if (Player && Zombie)
 	{
@@ -43,8 +43,6 @@ EBTNodeResult::Type UMyBTTask_CheckDistance::ExecuteTask(UBehaviorTreeComponent&
 		}
 		break;
 		}
-			
-		
 	}
 
 	return EBTNodeResult::Type();
