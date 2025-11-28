@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "GenericTeamAgentInterface.h"
 #include "MyCharacter.generated.h"
 
 class USpringArmComponent;
@@ -23,7 +22,7 @@ enum class EState : uint8
 };
 
 UCLASS()
-class MYPROJECT1120_API AMyCharacter : public ACharacter, public IGenericTeamAgentInterface
+class MYPROJECT1120_API AMyCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -152,9 +151,4 @@ public:
 	TObjectPtr<UAIPerceptionStimuliSourceComponent> StimuliSource;
 
 
-	// ----IGenericTeamAgentInterface-----
-	virtual void SetGenericTeamId(const FGenericTeamId& InTeamID) override;
-	virtual FGenericTeamId GetGenericTeamId() const override;
-
-	FGenericTeamId TeamID;
 };

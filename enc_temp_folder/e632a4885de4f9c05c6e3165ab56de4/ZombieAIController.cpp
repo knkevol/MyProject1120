@@ -35,7 +35,6 @@ void AZombieAIController::OnPossess(APawn* aPawn)
 	Perception->OnTargetPerceptionUpdated.AddDynamic(this, &AZombieAIController::ProcessActorPerception);
 	Perception->OnTargetPerceptionForgotten.AddDynamic(this, &AZombieAIController::ProcessPerceptionForget);
 	Perception->OnTargetPerceptionInfoUpdated.AddDynamic(this, &AZombieAIController::FActorPerceptionInfo);
-	SetGenericTeamId(3);
 }
 
 void AZombieAIController::OnUnPossess()
