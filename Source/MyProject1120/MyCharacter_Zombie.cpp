@@ -138,3 +138,8 @@ void AMyCharacter_Zombie::SpawnHitEffect(FHitResult Hit)
 	}
 
 }
+
+void AMyCharacter_Zombie::SetState(EZombieState NewState)
+{
+	CurState = NewState;
+}

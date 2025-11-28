@@ -7,6 +7,7 @@
 #include "ZombieAIController.generated.h"
 
 class UAIPerceptionComponent;
+class UBehaviorTree;
 
 /**
  * 
@@ -19,7 +20,24 @@ class MYPROJECT1120_API AZombieAIController : public AAIController
 public:
 	AZombieAIController();
 
+	virtual void OnPossess(APawn* aPawn) override;
+	virtual void OnUnPossess() override;
+
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "1128")
 	TObjectPtr<UAIPerceptionComponent> Perception;
-	
+
+	UFUNCTION()
+	void ProcessPerceptionUpdated(const TArray<AActor*>& UpdatedActors);
+
+	UFUNCTION()
+	void ProcessActorPerception(AActor* Actor, FAIStimulus Stimulus);
+
+	UFUNCTION()
+	void ProcessPerceptionForget(AActor* Actor);
+
+	UFUNCTION()
+	void FActorPerceptionInfo(const FActorPerceptionUpdateInfo& UpdateInfo);
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1128")
+	TObjectPtr<UBehaviorTree> RunBTAsset;
 };

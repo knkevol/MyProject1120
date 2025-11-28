@@ -46,6 +46,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1127")
 	EZombieState CurState;
 
+	void SetState(EZombieState NewState);
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1127")
 	float CurHp = 100;
 
