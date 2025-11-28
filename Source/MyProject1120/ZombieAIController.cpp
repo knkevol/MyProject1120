@@ -7,7 +7,7 @@
 #include "MyCharacter.h"
 #include "BrainComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "MyCharacter_Zombie.h"
+
 
 AZombieAIController::AZombieAIController()
 {
@@ -65,14 +65,33 @@ void AZombieAIController::ProcessActorPerception(AActor* Actor, FAIStimulus Stim
 	{
 		AMyCharacter* Player = Cast<AMyCharacter>(Actor);
 		AMyCharacter_Zombie* Zombie = Cast<AMyCharacter_Zombie>(GetPawn());
-		if (Player)
+		if (Stimulus.WasSuccessfullySensed())
 		{
-			
-			Blackboard->SetValueAsObject(TEXT("Target"), Player);
-			Blackboard->SetValueAsEnum(TEXT("CurState"), (uint8)(EZombieState::Chase));
-
-			Zombie->SetState(EZombieState::Chase);
-			Zombie->ChangeSpeed(400.0f);
+			if (Player && Zombie)
+			{
+				if (Zombie->GetCurrentState() == EZombieState::Death)
+				{
+					return;
+				}
+				Blackboard->SetValueAsObject(TEXT("Target"), Player);
+				SetState(EZombieState::Chase);
+				Zombie->SetState(EZombieState::Chase);
+				Zombie->ChangeSpeed(400.0f);
+			}
+		}
+		else
+		{
+			if (Player && Zombie)
+			{
+				if (Zombie->GetCurrentState() == EZombieState::Death)
+				{
+					return;
+				}
+				Blackboard->SetValueAsObject(TEXT("Target"), nullptr);
+				SetState(EZombieState::Normal);
+				Zombie->SetState(EZombieState::Normal);
+				Zombie->ChangeSpeed(80.0f);
+			}
 		}
 	}
 }
@@ -85,9 +104,12 @@ void AZombieAIController::ProcessPerceptionForget(AActor* Actor)
 	AMyCharacter_Zombie* Zombie = Cast<AMyCharacter_Zombie>(GetPawn());
 	if (Player && Zombie)
 	{
-
+		if (Zombie->GetCurrentState() == EZombieState::Death)
+		{
+			return;
+		}
 		Blackboard->SetValueAsObject(TEXT("Target"), nullptr);
-		Blackboard->SetValueAsEnum(TEXT("CurState"), (uint8)(EZombieState::Normal));
+		SetState(EZombieState::Normal);
 		Zombie->SetState(EZombieState::Normal);
 		Zombie->ChangeSpeed(80.0f);
 	}
@@ -98,4 +120,9 @@ void AZombieAIController::FActorPerceptionInfo(const FActorPerceptionUpdateInfo&
 	UE_LOG(LogTemp, Warning, TEXT("FActorPerceptionInfo %s"), *UpdateInfo.Target->GetName());
 
 
+}
+
+void AZombieAIController::SetState(EZombieState newState)
+{
+	Blackboard->SetValueAsEnum(TEXT("CurState"), (int8)(newState));
 }

@@ -63,4 +63,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ChangeSpeed(float NewMaxSpeed);
 
+	FORCEINLINE const EZombieState GetCurrentState() { return CurState; }
+
 };

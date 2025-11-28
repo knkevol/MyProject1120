@@ -5,6 +5,7 @@
 #include "Engine/DamageEvents.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "ZombieAIController.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -96,7 +97,15 @@ float AMyCharacter_Zombie::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	{
 		//Death Montage
 		DoDead();
-	}
+		SetState(EZombieState::Death);
+		AZombieAIController* AIC = Cast<AZombieAIController>(GetController());
+		if (AIC)
+		{
+			SetState(EZombieState::Death);
+		}
+	
+}
+
 
 	return 0.0f;
 

@@ -44,9 +44,6 @@ void AMyCharacter::BeginPlay()
 
 	//델리게이트 바인딩
 	OnActorBeginOverlap.AddDynamic(this, &AMyCharacter::ProcessBeginOverlap);
-
-	
-	
 }
 
 // Called every frame
