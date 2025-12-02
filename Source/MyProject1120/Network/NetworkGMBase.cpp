@@ -3,7 +3,7 @@
 
 #include "NetworkGMBase.h"
 #include "MyProject1120/MyProject1120.h"
-#include "../Network/NetworkUtil.h"
+#include "NetworkUtil.h"
 
 void ANetworkGMBase::BeginPlay()
 {

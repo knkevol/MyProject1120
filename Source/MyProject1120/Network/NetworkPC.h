@@ -16,5 +16,7 @@ class MYPROJECT1120_API ANetworkPC : public APlayerController
 
 public:
 	virtual void BeginPlay() override;
+
+	virtual void PostNetInit() override;
 	
 };
