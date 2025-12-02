@@ -3,18 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameStateBase.h"
-#include "NetworkGSBase.generated.h"
+#include "GameFramework/GameModeBase.h"
+#include "NetworkGMBase.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MYPROJECT1120_API ANetworkGSBase : public AGameStateBase
+class MYPROJECT1120_API ANetworkGMBase : public AGameModeBase
 {
 	GENERATED_BODY()
-
-public:
-
 	
 };

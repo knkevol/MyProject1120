@@ -13,8 +13,5 @@ UCLASS()
 class MYPROJECT1120_API ANetworkGSBase : public AGameStateBase
 {
 	GENERATED_BODY()
-
-public:
-
 	
 };

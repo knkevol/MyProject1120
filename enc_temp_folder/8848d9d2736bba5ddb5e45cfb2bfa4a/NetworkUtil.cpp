@@ -12,7 +12,7 @@ NetworkUtil::~NetworkUtil()
 {
 }
 
-void NetworkUtil::Log(UWorld* InWorld, const FString& CallInfo, const FString& InString)
+void NetworkUtil::Log(UWorld* InWorld, const FString& InString)
 {
 	if (!InWorld)
 	{
@@ -35,6 +35,5 @@ void NetworkUtil::Log(UWorld* InWorld, const FString& CallInfo, const FString& I
 		break;
 	}
 
-	UE_LOG(LogNetworkUtil, Warning, TEXT("%s %s - %s"), *Prefix, *CallInfo, *InString);
+	UE_LOG(LogNetworkUtil, Warning, TEXT("DASDS"));
 }
-
