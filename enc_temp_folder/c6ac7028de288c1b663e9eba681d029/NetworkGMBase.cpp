@@ -24,8 +24,7 @@ void ANetworkGMBase::PostLogin(APlayerController* NewPlayer)
 APlayerController* ANetworkGMBase::Login(UPlayer* NewPlayer, ENetRole InRemoteRole, const FString& Portal, const FString& Options, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage)
 {
 	
-	APlayerController* PC = Super::Login(NewPlayer, InRemoteRole, Portal, Options, UniqueId, ErrorMessage);
-	return PC;
+	return Super::Login(NewPlayer, InRemoteRole, Portal, Options, UniqueId, ErrorMessage);
 }
 
 void ANetworkGMBase::StartPlay()
