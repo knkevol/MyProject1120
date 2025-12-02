@@ -157,4 +157,6 @@ public:
 	virtual FGenericTeamId GetGenericTeamId() const override;
 
 	FGenericTeamId TeamID;
+
+	void DrawFrustum();
 };
