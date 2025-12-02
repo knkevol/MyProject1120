@@ -5,11 +5,6 @@
 #include "MyProject1120/MyProject1120.h"
 #include "../Network/NetworkUtil.h"
 
-void ANetworkGMBase::BeginPlay()
-{
-	NET_LOG(TEXT("Hello"));
-	Super::BeginPlay();
-}
 void ANetworkGMBase::PreLogin(const FString& Options, const FString& Address, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage)
 {
 	
@@ -27,7 +22,8 @@ APlayerController* ANetworkGMBase::Login(UPlayer* NewPlayer, ENetRole InRemoteRo
 	return Super::Login(NewPlayer, InRemoteRole, Portal, Options, UniqueId, ErrorMessage);
 }
 
-void ANetworkGMBase::StartPlay()
+void ANetworkGMBase::BeginPlay()
 {
-	Super::StartPlay();
+	NET_LOG(TEXT("Hello"));
+	Super::BeginPlay();
 }

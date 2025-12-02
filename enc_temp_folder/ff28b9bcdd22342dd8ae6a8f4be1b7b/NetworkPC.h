@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameStateBase.h"
-#include "NetworkGSBase.generated.h"
+#include "GameFramework/PlayerController.h"
+#include "NetworkPC.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MYPROJECT1120_API ANetworkGSBase : public AGameStateBase
+class MYPROJECT1120_API ANetworkPC : public APlayerController
 {
 	GENERATED_BODY()
 	
