@@ -21,6 +21,9 @@ void ATitlePC::BeginPlay()
 			TitleWidgetObject->AddToViewport();
 		}
 	}
+
+	bShowMouseCursor = true;
+	SetInputMode(FInputModeUIOnly());
 }
 
 void ATitlePC::PostInitializeComponents()
