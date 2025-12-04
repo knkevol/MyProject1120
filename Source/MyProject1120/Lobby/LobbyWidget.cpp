@@ -81,8 +81,16 @@ void ULobbyWidget::UpdateLeftTime(int32 InLeftTime)
 {
 	if (LeftTime)
 	{
-		FString Message = FString::Printf(TEXT("%d초 남음"), InLeftTime);
-		LeftTime->SetText(FText::FromString(Message));
+		if (InLeftTime < 0)
+		{
+			Start();
+		}
+		else
+		{
+			FString Message = FString::Printf(TEXT("%d초 남음"), InLeftTime);
+			LeftTime->SetText(FText::FromString(Message));
+		}
+		
 	}
 }
 
@@ -130,5 +138,13 @@ void ULobbyWidget::AddMessage(const FText& Message)
 			ChatScrollBox->AddChild(NewMessageBlock);
 			ChatScrollBox->ScrollToEnd();
 		}
+	}
+}
+
+void ULobbyWidget::ShowStartButton()
+{
+	if (StartButton)
+	{
+		StartButton->SetVisibility(ESlateVisibility::Visible);
 	}
 }

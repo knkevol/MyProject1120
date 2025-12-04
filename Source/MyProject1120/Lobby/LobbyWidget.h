@@ -59,5 +59,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	TObjectPtr<UDataTable> ChatStyleSet;
+
+	void ShowStartButton();
 	
 };

@@ -31,7 +31,7 @@ public:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data, ReplicatedUsing = "OnRep_LeftTime")
-	int32 LeftTime = 60;
+	int32 LeftTime = 10;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data, ReplicatedUsing = "OnRep_ConnectionCount")
 	int32 ConnectionCount = 0;
