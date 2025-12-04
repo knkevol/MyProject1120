@@ -39,7 +39,9 @@ void ULobbyWidget::NativeOnInitialized()
 
 void ULobbyWidget::Start()
 {
-	GetWorld()->ServerTravel(TEXT("InGame"));
+	ALobbyGM* GM = Cast<ALobbyGM>(UGameplayStatics::GetGameMode(GetWorld()));
+	GM->StartGame();
+	
 }
 
 void ULobbyWidget::ProcessOnCommit(const FText& Text, ETextCommit::Type CommitMethod)

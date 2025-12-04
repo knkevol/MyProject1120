@@ -27,6 +27,8 @@ public:
 
 	UFUNCTION()
 	void OnRep_ConnectionCount();
+	
+	void CountDownLeftTime();
 
 	virtual void BeginPlay() override;
 

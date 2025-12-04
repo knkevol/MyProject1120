@@ -30,6 +30,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
 	TObjectPtr<ULobbyWidget> LobbyWidgetObject;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
+	TSubclassOf<UUserWidget> LoadingWidgetClass;
+
 	//자동으로 네트워크를 통해서 실행하는 코드 생성
 	UFUNCTION(Server, Reliable)
 	void C2S_SendMessage(const FText& Message); // Network로 던지는 코드를 생성한것
@@ -39,5 +42,9 @@ public:
 	UFUNCTION(Client, Reliable)
 	void S2C_SendMessage(const FText& Message); // Network로 정보 던져서 실행. 자동생성
 	void S2C_SendMessage_Implementation(const FText& Message); // 구현
+
+	UFUNCTION(Client, Reliable)
+	void S2C_ShowLoadingScreen();
+	void S2C_ShowLoadingScreen_Implementation();
 	
 };

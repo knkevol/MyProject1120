@@ -32,6 +32,8 @@ public:
 
 	void StopLeftTimeTimer();
 
+	void StartGame();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
 	TObjectPtr<ULobbyWidget> LobbyWidgetObject;
 	
