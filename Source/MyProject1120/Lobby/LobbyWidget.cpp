@@ -84,7 +84,7 @@ void ULobbyWidget::UpdateLeftTime(int32 InLeftTime)
 	{
 		if (InLeftTime < 0)
 		{
-			ALobbyGM* GM = GetWorld()->GetAuthGameMode<ALobbyGM>();
+			ALobbyGM* GM =Cast<ALobbyGM>(UGameplayStatics::GetGameMode(GetWorld()));
 			GM->StopLeftTimeTimer();
 			Start();
 		}
