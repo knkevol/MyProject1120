@@ -46,9 +46,6 @@ void ALobbyGM::BeginPlay()
 		true,
 		0.0f
 	);
-
-	//BeginPlay보다 UI가 늦어서 업데이트를 해준다.
-	CheckConnectionCount();
 }
 
 void ALobbyGM::CheckConnectionCount()

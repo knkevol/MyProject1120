@@ -8,6 +8,8 @@
 #include "Components/Button.h"
 #include "Kismet/GameplayStatics.h"
 #include "LobbyGS.h"
+#include "LobbyPC.h"
+#include "../Title/DataGameInstanceSubsystem.h"
 
 void ULobbyWidget::NativeOnInitialized()
 {
@@ -40,6 +42,32 @@ void ULobbyWidget::Start()
 
 void ULobbyWidget::ProcessOnCommit(const FText& Text, ETextCommit::Type CommitMethod)
 {
+	switch (CommitMethod)
+	{
+		case ETextCommit::OnEnter:
+		{
+			ALobbyPC* PC = Cast<ALobbyPC>(GetOwningLocalPlayer());
+			if (PC)
+			{
+				UGameInstance* GI = UGameplayStatics::GetGameInstance(GetWorld());
+				if (GI)
+				{
+					UDataGameInstanceSubsystem* MySubsystem = GI->GetSubsystem<UDataGameInstanceSubsystem>();
+					//MySubsystem->UserID_1
+					FString Temp = FString::Printf(TEXT("% s : %s"), *MySubsystem->UserID_1, *Text.ToString());
+
+					//Local PC Call -> Server PC Execute
+					PC->C2S_SendMessage(FText::FromString(Temp));
+				}
+			}
+		}
+		break;
+		case ETextCommit::OnCleared:
+		{
+
+		}
+		break;
+	}
 }
 
 void ULobbyWidget::ProcessOnChange(const FText& Text)

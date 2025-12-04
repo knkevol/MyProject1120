@@ -37,3 +37,27 @@ void ALobbyPC::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 }
+
+bool ALobbyPC::C2S_SendMessage_Validate(const FText& Message)
+{
+	//서버에서만 실행된다.
+	return false;
+}
+
+void ALobbyPC::C2S_SendMessage_Implementation(const FText& Message)
+{
+	//Iterator 안돌리면 본인거 본인만 보임(서버를 통해 분산되지 않음)
+	for (auto Iter = GetWorld()->GetPlayerControllerIterator(); Iter; ++Iter)
+	{
+		ALobbyPC* PC = Cast<ALobbyPC>(*Iter);
+		if (PC)
+		{
+			PC->S2C_SendMessage(Message); //모든 PC에 Message 던져줌
+		}
+	}
+	
+}
+
+void ALobbyPC::S2C_SendMessage_Implementation(const FText& Message)
+{
+}
