@@ -2,16 +2,17 @@
 
 
 #include "LobbyWidget.h"
+#include "LobbyGS.h"
+#include "LobbyPC.h"
+#include "LobbyGM.h"
 #include "Components/TextBlock.h"
 #include "Components/EditableTextBox.h"
 #include "Components/ScrollBox.h"
 #include "Components/Button.h"
-#include "Kismet/GameplayStatics.h"
-#include "LobbyGS.h"
-#include "LobbyPC.h"
-#include "LobbyGM.h"
-#include "../Title/DataGameInstanceSubsystem.h"
 #include "Components/RichTextBlock.h"
+#include "Kismet/GameplayStatics.h"
+#include "../Title/DataGameInstanceSubsystem.h"
+
 
 void ULobbyWidget::NativeOnInitialized()
 {
@@ -40,8 +41,10 @@ void ULobbyWidget::NativeOnInitialized()
 void ULobbyWidget::Start()
 {
 	ALobbyGM* GM = Cast<ALobbyGM>(UGameplayStatics::GetGameMode(GetWorld()));
-	GM->StartGame();
-	
+	if (GM) 
+	{
+		GM->StartGame();
+	}	
 }
 
 void ULobbyWidget::ProcessOnCommit(const FText& Text, ETextCommit::Type CommitMethod)

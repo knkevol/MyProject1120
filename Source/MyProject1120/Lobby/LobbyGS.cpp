@@ -2,10 +2,12 @@
 
 
 #include "LobbyGS.h"
-#include "Net/UnrealNetwork.h"
 #include "LobbyPC.h"
-#include "Kismet/GameplayStatics.h"
+#include "LobbyGM.h"
 #include "LobbyWidget.h"
+#include "Net/UnrealNetwork.h"
+#include "Kismet/GameplayStatics.h"
+
 
 void ALobbyGS::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -27,7 +29,19 @@ void ALobbyGS::OnRep_ConnectionCount()
 
 void ALobbyGS::CountDownLeftTime()
 {
-
+	if (LeftTime > 0)
+	{
+		LeftTime--;
+		OnRep_LeftTime();
+	}
+	else
+	{
+		ALobbyGM* GM = Cast<ALobbyGM>(UGameplayStatics::GetGameMode(GetWorld()));
+		if (GM)
+		{
+			GM->StartGame();
+		}
+	}
 }
 
 void ALobbyGS::BeginPlay()

@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "LobbyPC.h"
-#include "LobbyWidget.h"
-#include "Kismet/GameplayStatics.h"
 #include "LobbyGS.h"
 #include "LobbyGM.h"
+#include "LobbyWidget.h"
+#include "Kismet/GameplayStatics.h"
 
 ALobbyPC::ALobbyPC()
 {
