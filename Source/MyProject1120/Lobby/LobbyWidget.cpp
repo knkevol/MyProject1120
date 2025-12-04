@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "LobbyWidget.h"
@@ -28,6 +28,7 @@ void ULobbyWidget::NativeOnInitialized()
 	if (GS)
 	{
 		GS->OnChageLeftTime.AddDynamic(this, &ULobbyWidget::UpdateLeftTime);
+		GS->OnChangeConnectionCount.AddDynamic(this, &ULobbyWidget::UpdateConnectionCount);
 	}
 
 }
@@ -49,7 +50,16 @@ void ULobbyWidget::UpdateLeftTime(int32 InLeftTime)
 {
 	if (LeftTime)
 	{
-		FString Message = FString::Printf(TEXT("%dÃÊ ³²À½"), InLeftTime);
+		FString Message = FString::Printf(TEXT("%dì´ˆ ë‚¨ìŒ"), InLeftTime);
 		LeftTime->SetText(FText::FromString(Message));
+	}
+}
+
+void ULobbyWidget::UpdateConnectionCount(int32 InConnectionCount)
+{
+	if (ConnectionCount)
+	{
+		FString Message = FString::Printf(TEXT("%dëª… ì ‘ì†"), InConnectionCount);
+		ConnectionCount->SetText(FText::FromString(Message));
 	}
 }

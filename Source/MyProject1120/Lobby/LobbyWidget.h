@@ -51,5 +51,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void UpdateLeftTime(int32 InLeftTime);
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateConnectionCount(int32 InConnectionCount);
 	
 };

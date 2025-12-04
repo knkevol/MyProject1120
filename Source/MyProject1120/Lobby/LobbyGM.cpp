@@ -25,6 +25,14 @@ APlayerController* ALobbyGM::Login(UPlayer* NewPlayer, ENetRole InRemoteRole, co
 void ALobbyGM::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
+
+	ALobbyGS* GS = GetGameState<ALobbyGS>();
+	if (GS)
+	{
+		GS->ConnectionCount++;
+		//°ª ¹Ù²î¸é ¹Ù²ï°ª º¹Á¦ÇØÁÜ
+		GS->OnRep_ConnectionCount();
+	}
 }
 
 void ALobbyGM::BeginPlay()

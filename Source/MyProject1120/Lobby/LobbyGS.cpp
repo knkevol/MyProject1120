@@ -19,3 +19,8 @@ void ALobbyGS::OnRep_LeftTime()
 {
 	OnChageLeftTime.Broadcast(LeftTime);
 }
+
+void ALobbyGS::OnRep_ConnectionCount()
+{
+	OnChangeConnectionCount.Broadcast(ConnectionCount);
+}
