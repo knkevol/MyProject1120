@@ -10,6 +10,7 @@
 #include "LobbyGS.h"
 #include "LobbyPC.h"
 #include "../Title/DataGameInstanceSubsystem.h"
+#include "Components/RichTextBlock.h"
 
 void ULobbyWidget::NativeOnInitialized()
 {
@@ -98,18 +99,35 @@ void ULobbyWidget::AddMessage(const FText& Message)
 {
 	if (ChatScrollBox)
 	{
-		UTextBlock* NewMessage = NewObject<UTextBlock>(ChatScrollBox); // == c++ new
-		if (NewMessage)
+		//UTextBlock* NewMessage = NewObject<UTextBlock>(ChatScrollBox); // NewObject == c++ new
+		//if (NewMessage)
+		//{
+		//	NewMessage->SetText(Message);
+		//	FSlateFontInfo FontInfo = NewMessage->GetFont();
+		//	//Font에 다이렉트로 접근 불가하여 FontInfo로 접근해야한다.
+		//	FontInfo.Size = 25;
+		//	NewMessage->SetFont(FontInfo);
+		//	//NewMessage->SetColorAndOpacity(FSlateColor(FLinearColor(0, 0, 1)));
+
+
+		//	ChatScrollBox->AddChild(NewMessage);
+		//	ChatScrollBox->ScrollToEnd();
+		//}
+		URichTextBlock* NewMessageBlock = NewObject<URichTextBlock>(ChatScrollBox);
+		if (NewMessageBlock)
 		{
-			NewMessage->SetText(Message);
-			FSlateFontInfo FontInfo = NewMessage->GetFont();
-			//Font에 다이렉트로 접근 불가하여 FontInfo로 접근해야한다.
-			FontInfo.Size = 25;
-			NewMessage->SetFont(FontInfo);
-			//NewMessage->SetColorAndOpacity(FSlateColor(FLinearColor(0, 0, 1)));
 
+			NewMessageBlock->SetText(Message);
+			NewMessageBlock->SetAutoWrapText(true);
+			NewMessageBlock->SetWrapTextAt(ChatScrollBox->GetCachedGeometry().GetLocalSize().X);
+			NewMessageBlock->SetWrappingPolicy(ETextWrappingPolicy::AllowPerCharacterWrapping);
 
-			ChatScrollBox->AddChild(NewMessage);
+			if (ChatStyleSet)
+			{
+				NewMessageBlock->SetTextStyleSet(ChatStyleSet);
+			}
+
+			ChatScrollBox->AddChild(NewMessageBlock);
 			ChatScrollBox->ScrollToEnd();
 		}
 	}

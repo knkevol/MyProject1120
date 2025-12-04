@@ -10,7 +10,6 @@ class UButton;
 class UEditableTextBox;
 class UTextBlock;
 class UScrollBox;
-class UDataTable;
 
 /**
  * 
