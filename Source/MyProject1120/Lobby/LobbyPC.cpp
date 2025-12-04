@@ -41,7 +41,7 @@ void ALobbyPC::Tick(float DeltaSeconds)
 bool ALobbyPC::C2S_SendMessage_Validate(const FText& Message)
 {
 	//서버에서만 실행된다.
-	return false;
+	return true;
 }
 
 void ALobbyPC::C2S_SendMessage_Implementation(const FText& Message)
@@ -60,4 +60,8 @@ void ALobbyPC::C2S_SendMessage_Implementation(const FText& Message)
 
 void ALobbyPC::S2C_SendMessage_Implementation(const FText& Message)
 {
+	if (LobbyWidgetObject)
+	{
+		LobbyWidgetObject->AddMessage(Message);
+	}
 }

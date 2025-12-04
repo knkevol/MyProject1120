@@ -41,6 +41,5 @@ public:
 	void Connect();
 
 	void SaveData();
-
 	
 };

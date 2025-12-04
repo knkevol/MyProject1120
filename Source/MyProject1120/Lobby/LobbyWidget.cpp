@@ -46,7 +46,7 @@ void ULobbyWidget::ProcessOnCommit(const FText& Text, ETextCommit::Type CommitMe
 	{
 		case ETextCommit::OnEnter:
 		{
-			ALobbyPC* PC = Cast<ALobbyPC>(GetOwningLocalPlayer());
+			ALobbyPC* PC = Cast<ALobbyPC>(GetOwningPlayer());
 			if (PC)
 			{
 				UGameInstance* GI = UGameplayStatics::GetGameInstance(GetWorld());
@@ -58,13 +58,15 @@ void ULobbyWidget::ProcessOnCommit(const FText& Text, ETextCommit::Type CommitMe
 
 					//Local PC Call -> Server PC Execute
 					PC->C2S_SendMessage(FText::FromString(Temp));
+					// OnCleared
+					ChatInput->SetText(FText::FromString(TEXT("")));
 				}
 			}
 		}
 		break;
 		case ETextCommit::OnCleared:
 		{
-
+			ChatInput->SetUserFocus(GetOwningPlayer());
 		}
 		break;
 	}
@@ -89,5 +91,26 @@ void ULobbyWidget::UpdateConnectionCount(int32 InConnectionCount)
 	{
 		FString Message = FString::Printf(TEXT("%d명 접속"), InConnectionCount);
 		ConnectionCount->SetText(FText::FromString(Message));
+	}
+}
+
+void ULobbyWidget::AddMessage(const FText& Message)
+{
+	if (ChatScrollBox)
+	{
+		UTextBlock* NewMessage = NewObject<UTextBlock>(ChatScrollBox); // == c++ new
+		if (NewMessage)
+		{
+			NewMessage->SetText(Message);
+			FSlateFontInfo FontInfo = NewMessage->GetFont();
+			//Font에 다이렉트로 접근 불가하여 FontInfo로 접근해야한다.
+			FontInfo.Size = 25;
+			NewMessage->SetFont(FontInfo);
+			//NewMessage->SetColorAndOpacity(FSlateColor(FLinearColor(0, 0, 1)));
+
+
+			ChatScrollBox->AddChild(NewMessage);
+			ChatScrollBox->ScrollToEnd();
+		}
 	}
 }

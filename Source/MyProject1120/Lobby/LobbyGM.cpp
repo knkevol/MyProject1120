@@ -26,6 +26,7 @@ void ALobbyGM::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 	
+	CheckConnectionCount();
 }
 
 void ALobbyGM::BeginPlay()
@@ -54,13 +55,13 @@ void ALobbyGM::CheckConnectionCount()
 	if (GS)
 	{
 		//PC count function = GetPlayerControllerIterator
-		int32 TempCnt = 0;
-		for (auto Iter = GetWorld()->GetPlayerControllerIterator(); Iter; Iter++)
+		int32 TempCount = 0;
+		for (auto Iter = GetWorld()->GetPlayerControllerIterator(); Iter; ++Iter)
 		{
-			TempCnt++;
+			TempCount++;
 		}
-		GS->ConnectionCount = TempCnt;
-		//°ª ¹Ù²î¸é ¹Ù²ï°ª º¹Á¦ÇØÁÜ
+
+		GS->ConnectionCount = TempCount;
 		GS->OnRep_ConnectionCount();
 	}
 }

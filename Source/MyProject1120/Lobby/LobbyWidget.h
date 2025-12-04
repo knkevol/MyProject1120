@@ -10,6 +10,7 @@ class UButton;
 class UEditableTextBox;
 class UTextBlock;
 class UScrollBox;
+class UDataTable;
 
 /**
  * 
@@ -54,5 +55,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void UpdateConnectionCount(int32 InConnectionCount);
+
+	void AddMessage(const FText& Message);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	TObjectPtr<UDataTable> ChatStyleSet;
 	
 };

@@ -28,6 +28,8 @@ public:
 	UFUNCTION()
 	void OnRep_ConnectionCount();
 
+	virtual void BeginPlay() override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data, ReplicatedUsing = "OnRep_LeftTime")
 	int32 LeftTime = 60;
 

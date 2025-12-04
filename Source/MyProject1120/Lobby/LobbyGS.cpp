@@ -24,3 +24,8 @@ void ALobbyGS::OnRep_ConnectionCount()
 {
 	OnChangeConnectionCount.Broadcast(ConnectionCount);
 }
+
+void ALobbyGS::BeginPlay()
+{
+	Super::BeginPlay();
+}
