@@ -6,6 +6,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "LobbyGM.generated.h"
 
+class ULobbyWidget;
 /**
  * 
  */
@@ -28,5 +29,10 @@ public:
 	FTimerHandle LeftTimerHandle;
 
 	void CheckConnectionCount();
+
+	void StopLeftTimeTimer();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
+	TObjectPtr<ULobbyWidget> LobbyWidgetObject;
 	
 };

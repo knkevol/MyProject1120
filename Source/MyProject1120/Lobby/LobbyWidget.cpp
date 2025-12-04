@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "LobbyGS.h"
 #include "LobbyPC.h"
+#include "LobbyGM.h"
 #include "../Title/DataGameInstanceSubsystem.h"
 #include "Components/RichTextBlock.h"
 
@@ -83,6 +84,8 @@ void ULobbyWidget::UpdateLeftTime(int32 InLeftTime)
 	{
 		if (InLeftTime < 0)
 		{
+			ALobbyGM* GM = GetWorld()->GetAuthGameMode<ALobbyGM>();
+			GM->StopLeftTimeTimer();
 			Start();
 		}
 		else
@@ -90,7 +93,6 @@ void ULobbyWidget::UpdateLeftTime(int32 InLeftTime)
 			FString Message = FString::Printf(TEXT("%d초 남음"), InLeftTime);
 			LeftTime->SetText(FText::FromString(Message));
 		}
-		
 	}
 }
 

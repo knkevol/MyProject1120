@@ -3,6 +3,7 @@
 
 #include "LobbyGM.h"
 #include "LobbyGS.h"
+#include "LobbyWidget.h"
 
 ALobbyGM::ALobbyGM()
 {
@@ -40,13 +41,14 @@ void ALobbyGM::BeginPlay()
 			{
 				GS->LeftTime--;
 				GS->OnRep_LeftTime();
-				
 			}
 			}),
 		1.0f,
 		true,
 		0.0f
 	);
+
+	
 }
 
 void ALobbyGM::CheckConnectionCount()
@@ -64,4 +66,9 @@ void ALobbyGM::CheckConnectionCount()
 		GS->ConnectionCount = TempCount;
 		GS->OnRep_ConnectionCount();
 	}
+}
+
+void ALobbyGM::StopLeftTimeTimer()
+{
+	GetWorld()->GetTimerManager().ClearTimer(LeftTimerHandle);
 }
