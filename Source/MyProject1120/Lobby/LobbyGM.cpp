@@ -25,14 +25,7 @@ APlayerController* ALobbyGM::Login(UPlayer* NewPlayer, ENetRole InRemoteRole, co
 void ALobbyGM::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
-
-	ALobbyGS* GS = GetGameState<ALobbyGS>();
-	if (GS)
-	{
-		GS->ConnectionCount++;
-		//값 바뀌면 바뀐값 복제해줌
-		GS->OnRep_ConnectionCount();
-	}
+	
 }
 
 void ALobbyGM::BeginPlay()
@@ -53,4 +46,24 @@ void ALobbyGM::BeginPlay()
 		true,
 		0.0f
 	);
+
+	//BeginPlay보다 UI가 늦어서 업데이트를 해준다.
+	CheckConnectionCount();
+}
+
+void ALobbyGM::CheckConnectionCount()
+{
+	ALobbyGS* GS = GetGameState<ALobbyGS>();
+	if (GS)
+	{
+		//PC count function = GetPlayerControllerIterator
+		int32 TempCnt = 0;
+		for (auto Iter = GetWorld()->GetPlayerControllerIterator(); Iter; Iter++)
+		{
+			TempCnt++;
+		}
+		GS->ConnectionCount = TempCnt;
+		//값 바뀌면 바뀐값 복제해줌
+		GS->OnRep_ConnectionCount();
+	}
 }
