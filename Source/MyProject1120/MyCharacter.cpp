@@ -16,6 +16,8 @@
 #include "PickupItemBase.h"
 #include "Components/DecalComponent.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -51,7 +53,7 @@ void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	DrawFrustum();
+	//DrawFrustum();
 
 }
 
@@ -68,6 +70,8 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		UIC->BindAction(IA_Fire, ETriggerEvent::Completed, this, &AMyCharacter::StopFire);
 		UIC->BindAction(IA_Zoom, ETriggerEvent::Started, this, &AMyCharacter::StartZoom);
 		UIC->BindAction(IA_Zoom, ETriggerEvent::Completed, this, &AMyCharacter::StopZoom);
+		UIC->BindAction(IA_Run, ETriggerEvent::Started, this, &AMyCharacter::StartRun);
+		UIC->BindAction(IA_Run, ETriggerEvent::Completed, this, &AMyCharacter::StopRun);
 	}
 
 }
@@ -286,6 +290,28 @@ void AMyCharacter::EatItem(APickupItemBase* PickedItem)
 	//}
 }
 
+void AMyCharacter::StartRun()
+{
+	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+	C2S_StartRun();
+}
+
+void AMyCharacter::StopRun()
+{
+	GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+	C2S_StopRun();
+}
+
+void AMyCharacter::C2S_StartRun_Implementation()
+{
+	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+}
+
+void AMyCharacter::C2S_StopRun_Implementation()
+{
+	GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+}
+
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -348,6 +374,13 @@ void AMyCharacter::SpawnHitEffect(FHitResult Hit)
 
 	}
 	
+}
+
+void AMyCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AMyCharacter, bSprint);
 }
 
 void AMyCharacter::SetGenericTeamId(const FGenericTeamId& InTeamID)

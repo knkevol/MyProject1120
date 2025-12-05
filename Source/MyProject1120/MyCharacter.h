@@ -99,13 +99,26 @@ public:
 
 	void EatItem(APickupItemBase* PickedItem);
 
+	void StartRun();
+	void StopRun();
+
+	//¸ñÀûÁö
+	UFUNCTION(Server, Reliable)
+	void C2S_StartRun();
+	void C2S_StartRun_Implementation();
+
+	UFUNCTION(Server, Reliable)
+	void C2S_StopRun();
+	void C2S_StopRun_Implementation();
+
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void SpawnHitEffect(FHitResult Hit);
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
-	uint8 bSpirnt : 1;
+	// -----Input Variable-----
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1205", Replicated)
+	uint8 bSprint : 1;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	uint8 bLeanL : 1;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
@@ -114,9 +127,10 @@ public:
 	uint8 bAiming : 1;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	uint8 bCrouch : 1;
-
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	uint8 bIsZoom : 1 = false;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	uint8 bIsFire : 1 = false;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	float CurHp = 100;
@@ -124,18 +138,21 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	float MaxHp = 100;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
-	uint8 bIsFire : 1 = false;
+	
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	EState State = EState::Unarmed;
 
+
+	// -----Montage-----
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
 	TObjectPtr<UAnimMontage> HitMontage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
 	TObjectPtr<UAnimMontage> DeathMontage;
 
+
+	// -----Input Action-----
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
 	TObjectPtr<UInputAction> IA_Reload;
 
@@ -145,11 +162,20 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
 	TObjectPtr<UInputAction> IA_Zoom;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1205")
+	TObjectPtr<UInputAction> IA_Run;
+
+
+	// -----Effect-----
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1127")
 	TObjectPtr<UParticleSystem> BloodEffect;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1128")
 	TObjectPtr<UAIPerceptionStimuliSourceComponent> StimuliSource;
+
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 
 
 	// ----IGenericTeamAgentInterface-----
