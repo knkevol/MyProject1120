@@ -90,4 +90,8 @@ public:
 	UFUNCTION(NetMulticast, Unreliable)
 	void S2A_SpawnMuzzleFlash(const FVector& OutSpawnLocation, const FRotator& OutAimRotation);
 	void S2A_SpawnMuzzleFlash_Implementation(const FVector& OutSpawnLocation, const FRotator& OutAimRotation);
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void S2A_SpawnSound(const FVector& OutSpawnLocation);
+	void S2A_SpawnSound_Implementation(const FVector& OutSpawnLocation);
 };

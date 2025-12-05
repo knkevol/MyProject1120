@@ -100,14 +100,12 @@ void AWeaponBase::Fire()
 
 	//Call = Server. 실행 = Client
 	S2A_SpawnMuzzleFlash(SpawnLocation, AimRotation);
+	S2A_SpawnSound(SpawnLocation);
 	// Recoil
 	Character->AddControllerPitchInput(-0.5f);
 
 	CurBullet--;
 	UE_LOG(LogTemp, Warning, TEXT("Fire %d"), CurBullet);
-	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), FireSound, GetActorLocation());
-
-	
 	TimeofLastShoot = GetWorld()->TimeSeconds;
 }
 
@@ -197,5 +195,11 @@ bool AWeaponBase::CalculateShootData(FVector& OutSpawnLocation, FVector& OutTarg
 void AWeaponBase::S2A_SpawnMuzzleFlash_Implementation(const FVector& OutSpawnLocation, const FRotator& OutAimRotation)
 {
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlash, OutSpawnLocation, OutAimRotation);
+}
+
+void AWeaponBase::S2A_SpawnSound_Implementation(const FVector& OutSpawnLocation)
+{
+	UE_LOG(LogTemp, Warning, TEXT("S2A_SpawnSound_Implementation"));
+	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), FireSound, OutSpawnLocation);
 }
 
