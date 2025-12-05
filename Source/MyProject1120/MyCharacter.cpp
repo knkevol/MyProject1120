@@ -68,7 +68,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		UIC->BindAction(IA_Reload, ETriggerEvent::Completed, this, &AMyCharacter::Reload);
 		UIC->BindAction(IA_Fire, ETriggerEvent::Started, this, &AMyCharacter::StartFire);
 		UIC->BindAction(IA_Fire, ETriggerEvent::Completed, this, &AMyCharacter::StopFire);
-		UIC->BindAction(IA_Zoom, ETriggerEvent::Started, this, &AMyCharacter::StartZoom);
+		UIC->BindAction(IA_Zoom, ETriggerEvent::Triggered, this, &AMyCharacter::StartZoom);
 		UIC->BindAction(IA_Zoom, ETriggerEvent::Completed, this, &AMyCharacter::StopZoom);
 		UIC->BindAction(IA_Run, ETriggerEvent::Started, this, &AMyCharacter::StartRun);
 		UIC->BindAction(IA_Run, ETriggerEvent::Completed, this, &AMyCharacter::StopRun);
@@ -186,12 +186,16 @@ void AMyCharacter::DoHit()
 
 void AMyCharacter::StartZoom()
 {
-	bIsZoom = true;
+	bIsZoom = true; //not use?
+	bAiming = true;
+	C2S_StartZoom();
 }
 
 void AMyCharacter::StopZoom()
 {
 	bIsZoom = false;
+	bAiming = false;
+	C2S_StopZoom();
 }
 
 
@@ -312,6 +316,14 @@ void AMyCharacter::C2S_StopRun_Implementation()
 	GetCharacterMovement()->MaxWalkSpeed = 300.0f;
 }
 
+void AMyCharacter::C2S_StartZoom_Implementation()
+{
+}
+
+void AMyCharacter::C2S_StopZoom_Implementation()
+{
+}
+
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -381,6 +393,15 @@ void AMyCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AMyCharacter, bSprint);
+	DOREPLIFETIME(AMyCharacter, bLeanL);
+	DOREPLIFETIME(AMyCharacter, bLeanR);
+	DOREPLIFETIME(AMyCharacter, bAiming);
+	DOREPLIFETIME(AMyCharacter, bCrouch);
+	DOREPLIFETIME(AMyCharacter, bIsZoom);
+	DOREPLIFETIME(AMyCharacter, bIsFire);
+	DOREPLIFETIME(AMyCharacter, CurHp);
+	DOREPLIFETIME(AMyCharacter, MaxHp);
+	DOREPLIFETIME(AMyCharacter, State);
 }
 
 void AMyCharacter::SetGenericTeamId(const FGenericTeamId& InTeamID)
@@ -467,4 +488,16 @@ void AMyCharacter::DrawFrustum()
 	UKismetSystemLibrary::DrawDebugLine(GetWorld(), WorldCorners[1], WorldCorners[5], LineColor, LineDuration, LineThickness);
 	UKismetSystemLibrary::DrawDebugLine(GetWorld(), WorldCorners[2], WorldCorners[6], LineColor, LineDuration, LineThickness);
 	UKismetSystemLibrary::DrawDebugLine(GetWorld(), WorldCorners[3], WorldCorners[7], LineColor, LineDuration, LineThickness);
+}
+
+FRotator AMyCharacter::GetAimOffset() const
+{
+	// World를 받아와서
+	const FVector AimDirWS = GetBaseAimRotation().Vector();
+	// Local 방향으로 변경
+	const FVector AimDirLS = ActorToWorld().InverseTransformVectorNoScale(AimDirWS);
+
+	// 방향벡터
+	const FRotator AimRotLS = AimDirLS.Rotation();
+	return AimRotLS;
 }

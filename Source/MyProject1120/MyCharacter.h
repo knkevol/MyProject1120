@@ -51,6 +51,8 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	TObjectPtr<class UChildActorComponent> Weapon;
 
+
+	// -----Input Function-----
 	UFUNCTION(BlueprintCallable)
 	void Move(float InRoll, float InPitch);
 
@@ -89,9 +91,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void StopZoom();
+	// -------------------------
 
-	UFUNCTION()
-	void ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
 
 	void EquipItem(APickupItemBase* PickedItem);
 
@@ -99,9 +100,11 @@ public:
 
 	void EatItem(APickupItemBase* PickedItem);
 
+	
+
+	// -----Server-----
 	void StartRun();
 	void StopRun();
-
 	//¸ñÀûÁö
 	UFUNCTION(Server, Reliable)
 	void C2S_StartRun();
@@ -111,36 +114,50 @@ public:
 	void C2S_StopRun();
 	void C2S_StopRun_Implementation();
 
+	UFUNCTION(Server, Reliable)
+	void C2S_StartZoom();
+	void C2S_StartZoom_Implementation();
+
+	UFUNCTION(Server, Reliable)
+	void C2S_StopZoom();
+	void C2S_StopZoom_Implementation();
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	// -----------------
+
+
+
+	// -----Delegate-----
+	UFUNCTION()
+	void ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
+
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
-	UFUNCTION(BlueprintCallable)
-	virtual void SpawnHitEffect(FHitResult Hit);
+		
 
 	// -----Input Variable-----
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1205", Replicated)
 	uint8 bSprint : 1;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1205", Replicated)
 	uint8 bLeanL : 1;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1205", Replicated)
 	uint8 bLeanR : 1;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1205", Replicated)
 	uint8 bAiming : 1;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1205", Replicated)
 	uint8 bCrouch : 1;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1205", Replicated)
 	uint8 bIsZoom : 1 = false;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1205", Replicated)
 	uint8 bIsFire : 1 = false;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+
+	// -----Player State-----
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1205", Replicated)
 	float CurHp = 100;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1205", Replicated)
 	float MaxHp = 100;
-
-	
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1205", Replicated)
 	EState State = EState::Unarmed;
 
 
@@ -173,8 +190,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1128")
 	TObjectPtr<UAIPerceptionStimuliSourceComponent> StimuliSource;
 
-
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	UFUNCTION(BlueprintCallable)
+	virtual void SpawnHitEffect(FHitResult Hit);
 
 
 
@@ -185,4 +202,7 @@ public:
 	FGenericTeamId TeamID;
 
 	void DrawFrustum();
+
+
+	FRotator GetAimOffset() const;
 };

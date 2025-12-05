@@ -40,6 +40,8 @@ public:
 	uint8 bLeanR : 1;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	uint8 bAiming : 1;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
+	uint8 bIsZoom : 1;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	float CurrentLeanAngle;

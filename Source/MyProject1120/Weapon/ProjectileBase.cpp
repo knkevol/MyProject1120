@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "ProjectileBase.h"
@@ -64,7 +64,7 @@ void AProjectileBase::ProcessBeginOverlap(AActor* OverlappedActor, AActor* Other
 
 			
 
-	////���� ����, ��ź
+	////범위 공격, 폭탄
 	//UGameplayStatics::ApplyRadialDamage(HitResult.GetActor(),
 	//	10,
 	//	HitResult.ImpactPoint,
@@ -81,10 +81,11 @@ void AProjectileBase::ProcessComponentHit(UPrimitiveComponent* HitComponent, AAc
 {
 
 	SpawnHitEffect(Hit);
+	//클라이언트는 복제된 것이기 떄문에 Owner가 없음. 소유권 없이 따라감. hit됐을때 Owner가 없기떄문에 프로그램이 죽는다.
 	APawn* Pawn = Cast<APawn>(GetOwner()->GetOwner());
 	if (Pawn)
 	{
-		//�� ������
+		//총 데미지
 		UGameplayStatics::ApplyPointDamage(HitResult.GetActor(),
 			Damage,
 			-HitResult.ImpactNormal,
