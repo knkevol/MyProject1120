@@ -86,4 +86,8 @@ public:
 
 
 	bool CalculateShootData(FVector& OutSpawnLocation, FVector& OutTargetLocation, FVector& OutBulletDirection, FRotator& OutAimRotation);
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void S2A_SpawnMuzzleFlash(const FVector& OutSpawnLocation, const FRotator& OutAimRotation);
+	void S2A_SpawnMuzzleFlash_Implementation(const FVector& OutSpawnLocation, const FRotator& OutAimRotation);
 };
