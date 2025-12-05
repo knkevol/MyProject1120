@@ -137,18 +137,13 @@ void AMyCharacter::DoFire()
 void AMyCharacter::StartFire()
 {
 	bIsFire = true;
-	DoFire();
+	C2S_StartFire();
 }
 
 void AMyCharacter::StopFire()
 {
 	bIsFire = false;
-	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
-	if (ChildWeapon)
-	{
-		ChildWeapon->StopFire();
-	}
-
+	C2S_StopFire();
 }
 
 void AMyCharacter::DoDeadEnd()
@@ -364,6 +359,22 @@ void AMyCharacter::C2S_StartZoom_Implementation()
 void AMyCharacter::C2S_StopZoom_Implementation()
 {
 	bIsZoom = false;
+}
+
+void AMyCharacter::C2S_StartFire_Implementation()
+{
+	bIsFire = true;
+	DoFire();
+}
+
+void AMyCharacter::C2S_StopFire_Implementation()
+{
+	bIsFire = false;
+	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
+	if (ChildWeapon)
+	{
+		ChildWeapon->StopFire();
+	}
 }
 
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

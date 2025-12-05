@@ -131,6 +131,14 @@ public:
 	void C2S_StopZoom();
 	void C2S_StopZoom_Implementation();
 
+	UFUNCTION(Server, Reliable)
+	void C2S_StartFire();
+	void C2S_StartFire_Implementation();
+
+	UFUNCTION(Server, Reliable)
+	void C2S_StopFire();
+	void C2S_StopFire_Implementation();
+
 	//UFUNCTION(Server, Reliable)
 	//void C2S_StartLeanL();
 	//void C2S_StartLeanL_Implementation();

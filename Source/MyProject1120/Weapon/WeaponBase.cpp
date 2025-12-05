@@ -59,7 +59,6 @@ void AWeaponBase::Reload()
 
 void AWeaponBase::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("AWeaponBase::Fire()"));
 	float CurrentTimeofShoot = GetWorld()->TimeSeconds - TimeofLastShoot;
 
 	if (CurrentTimeofShoot < ReFireRate)
@@ -78,15 +77,63 @@ void AWeaponBase::Fire()
 	{
 		return;
 	}
-	
-	/*FTransform SpawnTransform = Mesh->GetSocketTransform(TEXT("Muzzle"));
-	GetWorld()->SpawnActor<AProjectileBase>(ProjectileTemplate, SpawnTransform);*/
+	//Calculate
+	FVector SpawnLocation;
+	FVector TargetLocation;
+	FVector BulletDirection;
+	FRotator AimRotation;
+	FHitResult HitResult;
 
-
-	APlayerController* PC = Cast<APlayerController>(Character->GetController());
-	if (PC)
+	bool bResult = CalculateShootData(SpawnLocation, TargetLocation, BulletDirection, AimRotation);
+	if (!bResult)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AWeaponBase::Fire() _ PC"));
+		return;
+	}
+
+
+	FireProjectile(FTransform(AimRotation, SpawnLocation, FVector::OneVector), HitResult);
+
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlash, SpawnLocation, AimRotation);		
+
+	// Recoil
+	Character->AddControllerPitchInput(-0.5f);
+
+	CurBullet--;
+	UE_LOG(LogTemp, Warning, TEXT("Fire %d"), CurBullet);
+	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), FireSound, GetActorLocation());
+
+	
+	TimeofLastShoot = GetWorld()->TimeSeconds;
+}
+
+void AWeaponBase::StopFire()
+{
+	GetWorld()->GetTimerManager().ClearTimer(RefireTimer);
+}
+
+void AWeaponBase::FireProjectile(FTransform SpawnTransform, FHitResult InHitResult)
+{
+
+	AProjectileBase* Projectile = GetWorld()->SpawnActor<AProjectileBase>(ProjectileTemplate, SpawnTransform);
+	Projectile->HitResult = InHitResult;
+	Projectile->SetOwner(this);
+	
+}
+
+bool AWeaponBase::CalculateShootData(FVector& OutSpawnLocation, FVector& OutTargetLocation, FVector& OutBulletDirection, FRotator& OutAimRotation)
+{
+
+	ACharacter* Character = Cast<ACharacter>(GetOwner());
+	if (!Character)
+	{
+		return false;
+	}
+	APlayerController* PC = Cast<APlayerController>(Character->GetController());
+	if (!PC)
+	{
+		return false;
+	}
+		UE_LOG(LogTemp, Warning, TEXT("AWeaponBase::CalculateShootData() _ PC"));
 		int32 SizeX = 0;
 		int32 SizeY = 0;
 		int32 CenterX = 0;
@@ -128,44 +175,16 @@ void AWeaponBase::Fire()
 			HitResult,
 			true
 		);
-		
+
 		//Calculate
-		FVector SpawnLocation = Mesh->GetSocketLocation(TEXT("Muzzle"));
-		FVector TargetLocation = bResult ? HitResult.ImpactPoint : End;
-		FVector BulletDirection = (TargetLocation - SpawnLocation).GetSafeNormal();
+		OutSpawnLocation = Mesh->GetSocketLocation(TEXT("Muzzle"));
+		OutTargetLocation = bResult ? HitResult.ImpactPoint : End;
+		OutBulletDirection = (OutTargetLocation - OutSpawnLocation).GetSafeNormal();
 
-		
-		FRotator AimRotation = UKismetMathLibrary::FindLookAtRotation(SpawnLocation, TargetLocation + (UKismetMathLibrary::RandomUnitVector() * 0.3));
-		
-		
-		FireProjectile(FTransform(AimRotation, SpawnLocation, FVector::OneVector), HitResult);
 
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MuzzleFlash, SpawnLocation, AimRotation);		
+		OutAimRotation = UKismetMathLibrary::FindLookAtRotation(OutSpawnLocation, OutTargetLocation + (UKismetMathLibrary::RandomUnitVector() * 0.3));
 
-		// Recoil
-		Character->AddControllerPitchInput(-0.5f);
 
-	}
-
-	CurBullet--;
-	UE_LOG(LogTemp, Warning, TEXT("Fire %d"), CurBullet);
-	UGameplayStatics::SpawnSoundAtLocation(GetWorld(), FireSound, GetActorLocation());
-
-	
-	TimeofLastShoot = GetWorld()->TimeSeconds;
-}
-
-void AWeaponBase::StopFire()
-{
-	GetWorld()->GetTimerManager().ClearTimer(RefireTimer);
-}
-
-void AWeaponBase::FireProjectile(FTransform SpawnTransform, FHitResult InHitResult)
-{
-
-	AProjectileBase* Projectile = GetWorld()->SpawnActor<AProjectileBase>(ProjectileTemplate, SpawnTransform);
-	Projectile->HitResult = InHitResult;
-	Projectile->SetOwner(this);
-	
+		return true;
 }
 

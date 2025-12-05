@@ -83,4 +83,7 @@ public:
 	float TimeofLastShoot = 0.0f;
 
 	FTimerHandle RefireTimer;
+
+
+	bool CalculateShootData(FVector& OutSpawnLocation, FVector& OutTargetLocation, FVector& OutBulletDirection, FRotator& OutAimRotation);
 };
