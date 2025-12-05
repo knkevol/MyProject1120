@@ -19,10 +19,12 @@ void APCMBase::UpdateCamera(float DeltaTime)
 		float CurrentFOV = FMath::FInterpTo(GetFOVAngle(), TargetFOV, DeltaTime, ZoomSpeed);
 		if (Pawn->bIsZoom)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("APCMBase::UpdateCamera CurrentFOV"));
 			SetFOV(CurrentFOV);
 		}
 		else
 		{
+			UE_LOG(LogTemp, Warning, TEXT("APCMBase::UpdateCamera TargetFOV"));
 			SetFOV(TargetFOV);
 		}
 	}

@@ -27,6 +27,12 @@ AProjectileBase::AProjectileBase()
 	Movement->MaxSpeed = 8000.0f;
 	Movement->InitialSpeed = 8000.f;
 
+	SetReplicates(true);
+	SetReplicateMovement(true);
+	bNetLoadOnClient = true;
+	bNetUseOwnerRelevancy = true;
+
+
 }
 
 // Called when the game starts or when spawned
@@ -81,6 +87,13 @@ void AProjectileBase::ProcessComponentHit(UPrimitiveComponent* HitComponent, AAc
 {
 
 	SpawnHitEffect(Hit);
+
+	if (GetOwner())
+	{
+		//서버아니면 총알주인 없음
+		return;
+	}
+
 	//클라이언트는 복제된 것이기 떄문에 Owner가 없음. 소유권 없이 따라감. hit됐을때 Owner가 없기떄문에 프로그램이 죽는다.
 	APawn* Pawn = Cast<APawn>(GetOwner()->GetOwner());
 	if (Pawn)

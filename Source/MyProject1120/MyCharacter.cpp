@@ -19,6 +19,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Net/UnrealNetwork.h"
 
+
 // Sets default values
 AMyCharacter::AMyCharacter()
 {
@@ -70,8 +71,14 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		UIC->BindAction(IA_Fire, ETriggerEvent::Completed, this, &AMyCharacter::StopFire);
 		UIC->BindAction(IA_Zoom, ETriggerEvent::Triggered, this, &AMyCharacter::StartZoom);
 		UIC->BindAction(IA_Zoom, ETriggerEvent::Completed, this, &AMyCharacter::StopZoom);
-		UIC->BindAction(IA_Run, ETriggerEvent::Started, this, &AMyCharacter::StartRun);
+		UIC->BindAction(IA_Run, ETriggerEvent::Triggered, this, &AMyCharacter::StartRun);
 		UIC->BindAction(IA_Run, ETriggerEvent::Completed, this, &AMyCharacter::StopRun);
+		UIC->BindAction(IA_LeanL, ETriggerEvent::Triggered, this, &AMyCharacter::StartLeanL);
+		UIC->BindAction(IA_LeanL, ETriggerEvent::Completed, this, &AMyCharacter::StopLeanL);
+		UIC->BindAction(IA_LeanR, ETriggerEvent::Triggered, this, &AMyCharacter::StartLeanR);
+		UIC->BindAction(IA_LeanR, ETriggerEvent::Completed, this, &AMyCharacter::StopLeanR);
+		UIC->BindAction(IA_Crouch, ETriggerEvent::Triggered, this, &AMyCharacter::StartCrouch);
+		UIC->BindAction(IA_Crouch, ETriggerEvent::Completed, this, &AMyCharacter::StopCrouch);
 	}
 
 }
@@ -186,30 +193,35 @@ void AMyCharacter::DoHit()
 
 void AMyCharacter::StartZoom()
 {
-	bIsZoom = true; //not use?
-	bAiming = true;
+	bIsZoom = true;
+	//bAiming = true;
 	C2S_StartZoom();
 }
 
 void AMyCharacter::StopZoom()
 {
 	bIsZoom = false;
-	bAiming = false;
+	//bAiming = false;
 	C2S_StopZoom();
 }
 
 
 void AMyCharacter::ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
+	//Client는 무기 X
+	APlayerController* PC = Cast<APlayerController>(GetController());
+	if (!PC || !PC->HasAuthority())
+	{
+		return;
+		/*if (PC->GetNetMode() == ENetMode::NM_Client)
+		{
+			return;
+		}*/
+	}
+
 	APickupItemBase* PickedItem = Cast<APickupItemBase>(OtherActor);
 	if (PickedItem)
 	{
-		//FActorSpawnParameters SpawnParams;
-		//SpawnParams.Owner = this;
-		//SpawnParams.Instigator = this;
-		//SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		//SpawnParams.TransformScaleMethod = ESpawnActorScaleMethod::MultiplyWithRoot;
-
 		switch (PickedItem->ItemType)
 		{
 		case EItemType::Use:
@@ -223,13 +235,13 @@ void AMyCharacter::ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherAct
 			break;
 		}
 
+		//Client일때도 소유권
+		PickedItem->SetOwner(this);
+
 		if (!PickedItem->bIsInfinity)
 		{
 			PickedItem->Destroy();
 		}
-		
-
-		
 	}
 }
 
@@ -240,10 +252,8 @@ void AMyCharacter::EquipItem(APickupItemBase* PickedItem)
 	//장착하는 아이템인지 예외처리 필요
 	if (ChildWeapon)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AMyCharacter::EquipItem"));
 		if (ChildWeapon->Name.Compare(TEXT("Pistol")) == 0)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("AMyCharacter::EquipItem_Pistol"));
 			ChildWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, ChildWeapon->SocketName);
 			State = EState::Pistol;
 			ChildWeapon->SetOwner(this);
@@ -306,6 +316,36 @@ void AMyCharacter::StopRun()
 	C2S_StopRun();
 }
 
+void AMyCharacter::StartLeanL()
+{
+	bLeanL = true;
+}
+
+void AMyCharacter::StopLeanL()
+{
+	bLeanL = false;
+}
+
+void AMyCharacter::StartLeanR()
+{
+	bLeanR = true;
+}
+
+void AMyCharacter::StopLeanR()
+{
+	bLeanR = false;
+}
+
+void AMyCharacter::StartCrouch()
+{
+	bCrouch = true;
+}
+
+void AMyCharacter::StopCrouch()
+{
+	bCrouch = false;
+}
+
 void AMyCharacter::C2S_StartRun_Implementation()
 {
 	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
@@ -318,10 +358,12 @@ void AMyCharacter::C2S_StopRun_Implementation()
 
 void AMyCharacter::C2S_StartZoom_Implementation()
 {
+	bIsZoom = true;
 }
 
 void AMyCharacter::C2S_StopZoom_Implementation()
 {
+	bIsZoom = false;
 }
 
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

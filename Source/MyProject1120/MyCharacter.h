@@ -105,6 +105,15 @@ public:
 	// -----Server-----
 	void StartRun();
 	void StopRun();
+
+	void StartLeanL();
+	void StopLeanL();
+	void StartLeanR();
+	void StopLeanR();
+
+	void StartCrouch();
+	void StopCrouch();
+
 	//¸ñÀûÁö
 	UFUNCTION(Server, Reliable)
 	void C2S_StartRun();
@@ -121,6 +130,30 @@ public:
 	UFUNCTION(Server, Reliable)
 	void C2S_StopZoom();
 	void C2S_StopZoom_Implementation();
+
+	//UFUNCTION(Server, Reliable)
+	//void C2S_StartLeanL();
+	//void C2S_StartLeanL_Implementation();
+
+	//UFUNCTION(Server, Reliable)
+	//void C2S_StopLeanL();
+	//void C2S_StopLeanL_Implementation();
+
+	//UFUNCTION(Server, Reliable)
+	//void C2S_StartLeanR();
+	//void C2S_StartLeanR_Implementation();
+
+	//UFUNCTION(Server, Reliable)
+	//void C2S_StopLeanR();
+	//void C2S_StopLeanR_Implementation();
+
+	//UFUNCTION(Server, Reliable)
+	//void C2S_StartCrouch();
+	//void C2S_StartCrouch_Implementation();
+
+	//UFUNCTION(Server, Reliable)
+	//void C2S_StopCrouch();
+	//void C2S_StopCrouch_Implementation();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	// -----------------
@@ -181,6 +214,15 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1205")
 	TObjectPtr<UInputAction> IA_Run;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1205")
+	TObjectPtr<UInputAction> IA_LeanL;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1205")
+	TObjectPtr<UInputAction> IA_LeanR;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1205")
+	TObjectPtr<UInputAction> IA_Crouch;
 
 
 	// -----Effect-----

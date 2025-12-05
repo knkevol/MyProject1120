@@ -12,6 +12,8 @@
 #include "TimerManager.h"
 #include "ProjectileBase.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "../MyProject1120.h"
+#include "../Network/NetworkUtil.h"
 
 
 // Sets default values
@@ -22,12 +24,23 @@ AWeaponBase::AWeaponBase()
 
 	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
 	RootComponent = Mesh;
+
+	SetReplicates(true);
 }
 
 // Called when the game starts or when spawned
 void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (GetOwner())
+	{
+		NET_LOG(FString::Printf(TEXT("Weapon Owver %s"), *GetOwner()->GetName()));
+	}
+	else
+	{
+		NET_LOG(FString::Printf(TEXT("No Owver")));
+	}
 	
 }
 
