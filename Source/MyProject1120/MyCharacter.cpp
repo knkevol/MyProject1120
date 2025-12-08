@@ -67,7 +67,10 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	UEnhancedInputComponent* UIC = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	if (UIC)
 	{
-		UIC->BindAction(IA_Reload, ETriggerEvent::Completed, this, &AMyCharacter::Reload);
+		//UIC->BindAction(IA_Reload, ETriggerEvent::Completed, this, &AMyCharacter::Reload);
+		UIC->BindAction(IA_Reload, ETriggerEvent::Completed, this, &AMyCharacter::DoReload);
+
+
 		UIC->BindAction(IA_Fire, ETriggerEvent::Started, this, &AMyCharacter::StartFire);
 		UIC->BindAction(IA_Fire, ETriggerEvent::Completed, this, &AMyCharacter::StopFire);
 		UIC->BindAction(IA_Zoom, ETriggerEvent::Triggered, this, &AMyCharacter::StartZoom);
@@ -342,6 +345,12 @@ void AMyCharacter::StopCrouch()
 	bCrouch = false;
 }
 
+void AMyCharacter::DoReload()
+{
+	Reload();
+	C2S_Reload();
+}
+
 void AMyCharacter::C2S_StartRun_Implementation()
 {
 	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
@@ -385,6 +394,11 @@ void AMyCharacter::C2S_Death_Implementation()
 		//Death Montage
 		DoDead();
 	}
+}
+
+void AMyCharacter::C2S_Reload_Implementation()
+{
+	Reload();
 }
 
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

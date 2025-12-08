@@ -114,6 +114,8 @@ public:
 	void StartCrouch();
 	void StopCrouch();
 
+	void DoReload();
+
 	//UFUNCTION(목적지, 값보장)
 	UFUNCTION(Server, Reliable)
 	void C2S_StartRun();
@@ -142,6 +144,14 @@ public:
 	UFUNCTION(Server, Reliable)
 	void C2S_Death();
 	void C2S_Death_Implementation();
+
+	UFUNCTION(Server, Reliable)
+	void C2S_Reload();
+	void C2S_Reload_Implementation();
+
+	//UFUNCTION(NetMulticast, Unreliable)
+	//void S2A_HitEffect();
+	//void S2A_HitEffect_Implementation();
 
 	//UFUNCTION(Server, Reliable)
 	//void C2S_StartLeanL();
