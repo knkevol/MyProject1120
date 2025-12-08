@@ -451,9 +451,12 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 
 	if (CurHp <= 0)
 	{
-		//Death Montage
-		
-		DoDead();
+		//Death Montage_Server
+		AInGameGM* GM = Cast<AInGameGM>(UGameplayStatics::GetGameMode(GetWorld()));
+		if (GM)
+		{
+			GM->CheckInGameConnectionCount();
+		}
 		S2A_Death();
 	}
 

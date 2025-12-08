@@ -17,9 +17,14 @@ class MYPROJECT1120_API AInGameGM : public AGameModeBase
 	GENERATED_BODY()
 
 public:
-	virtual void PostLogin(APlayerController* NewPlayer) override;
+	AInGameGM();
 
-	void CheckInGameConnectionCount();
+	virtual void BeginPlay() override;
+
+	virtual void PostLogin(APlayerController* NewPlayer) override;
+	virtual void Logout(AController* Exiting) override;
+
+	int32 CheckInGameConnectionCount();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
 	TObjectPtr<UInGameWidget> InGameWidgetObject;

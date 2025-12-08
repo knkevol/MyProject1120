@@ -6,7 +6,8 @@
 #include "GameFramework/GameStateBase.h"
 #include "InGameGS.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangedInGameConnectionCount, const int32, InGameConnectionCount);
+//BP not use
+DECLARE_DELEGATE_OneParam(FOnChangedInGameConnectionCount, const int32);
 
 /**
  * 
@@ -17,15 +18,19 @@ class MYPROJECT1120_API AInGameGS : public AGameStateBase
 	GENERATED_BODY()
 
 public:
+	//Replicate 시 무조건 재정의 필요
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UFUNCTION()
 	void OnRep_InGameConnectionCount();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data, ReplicatedUsing = "OnRep_InGameConnectionCount")
-	int32 InGameConnectionCount = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = 1208, ReplicatedUsing = "OnRep_InGameConnectionCount")
+	int32 InGameCount = 0;
 
-	UPROPERTY(BlueprintAssignable)
-	FOnChangedInGameConnectionCount OnInGameChangeConnectionCount;
+	
+	FOnChangedInGameConnectionCount OnChangeInGameCount;
+
+
+	void UpdateInGameCount(int32 ConnectCount);
 	
 };

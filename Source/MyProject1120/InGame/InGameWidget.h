@@ -7,6 +7,7 @@
 #include "InGameWidget.generated.h"
 
 class UTextBlock;
+class UProgressBar;
 
 /**
  * 
@@ -24,5 +25,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Component, meta = (WidgetBind))
 	TObjectPtr <UTextBlock> InGameConnectionCount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Component, meta = (WidgetBind))
+	TObjectPtr <UProgressBar> HPBar;
+
+	UFUNCTION()
+	void ProcessChangeInGameCount(int32 InConnectionCount);
 	
 };

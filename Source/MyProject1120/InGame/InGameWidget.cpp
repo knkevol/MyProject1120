@@ -13,7 +13,7 @@ void UInGameWidget::NativeOnInitialized()
 	AInGameGS* GS = Cast<AInGameGS>(UGameplayStatics::GetGameState(GetWorld()));
 	if (GS)
 	{
-		GS->OnInGameChangeConnectionCount.AddDynamic(this, &UInGameWidget::UpdateInGameConnectionCount);
+		GS->OnChangeInGameCount.BindUObject(this, &UInGameWidget::ProcessChangeInGameCount);
 	}
 }
 
@@ -21,7 +21,16 @@ void UInGameWidget::UpdateInGameConnectionCount(int32 InConnectionCount)
 {
 	if (InGameConnectionCount)
 	{
-		FString Message = FString::Printf(TEXT("%d명 플레이"), InConnectionCount);
+		FString Message = FString::Printf(TEXT("%d명 생존"), InConnectionCount);
 		InGameConnectionCount->SetText(FText::FromString(Message));
+	}
+}
+
+void UInGameWidget::ProcessChangeInGameCount(int32 InConnectionCount)
+{
+	if (InGameConnectionCount)
+	{
+		FString Temp = FString::Printf(TEXT("%d명 생존"), InConnectionCount);
+		InGameConnectionCount->SetText(FText::FromString(Temp));
 	}
 }

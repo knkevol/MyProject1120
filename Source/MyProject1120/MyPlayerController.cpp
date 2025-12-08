@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "MyPlayerController.h"
@@ -32,6 +32,7 @@ void AMyPlayerController::OnUnPossess()
 		if (UEnhancedInputLocalPlayerSubsystem* InputSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 		{
 			InputSystem->RemoveMappingContext(IMC_Default);
+			
 		}
 	}
 }
@@ -42,7 +43,7 @@ void AMyPlayerController::BeginPlay()
 
 	if (InGameWidgetClass)
 	{
-		if (IsLocalPlayerController())
+		if (IsLocalPlayerController()) //Network 작업 _ UI는 서버에서 붙이면 안됨
 		{
 			InGameWidgetObject = CreateWidget<UInGameWidget>(this, InGameWidgetClass);
 			InGameWidgetObject->AddToViewport();
@@ -55,3 +56,4 @@ void AMyPlayerController::BeginPlay()
 		}
 	}
 }
+
