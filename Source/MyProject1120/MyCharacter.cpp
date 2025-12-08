@@ -18,6 +18,8 @@
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "InGame/InGameGS.h"
+#include "InGame/InGameGM.h"
 
 
 // Sets default values

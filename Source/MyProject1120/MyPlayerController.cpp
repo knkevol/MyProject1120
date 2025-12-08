@@ -5,6 +5,10 @@
 #include "InputMappingContext.h"
 #include "InputAction.h"
 #include "EnhancedInputSubsystems.h"
+#include "InGame/InGameWidget.h"
+#include "InGame/InGameGM.h"
+#include "InGame/InGameGS.h"
+#include "Kismet/GameplayStatics.h"
 
 void AMyPlayerController::OnPossess(APawn* aPawn)
 {
@@ -28,6 +32,26 @@ void AMyPlayerController::OnUnPossess()
 		if (UEnhancedInputLocalPlayerSubsystem* InputSystem = LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 		{
 			InputSystem->RemoveMappingContext(IMC_Default);
+		}
+	}
+}
+
+void AMyPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (InGameWidgetClass)
+	{
+		if (IsLocalPlayerController())
+		{
+			InGameWidgetObject = CreateWidget<UInGameWidget>(this, InGameWidgetClass);
+			InGameWidgetObject->AddToViewport();
+
+			AInGameGM* GM = Cast<AInGameGM>(UGameplayStatics::GetGameMode(GetWorld()));
+			if (GM)
+			{
+				GM->CheckInGameConnectionCount();
+			}
 		}
 	}
 }

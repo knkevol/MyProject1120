@@ -7,6 +7,7 @@
 #include "MyPlayerController.generated.h"
 
 class UInputMappingContext;
+class UInGameWidget;
 
 /**
  * 
@@ -20,8 +21,18 @@ public:
 	virtual void OnPossess(APawn* aPawn) override;
 	virtual void OnUnPossess() override;
 
+	virtual void BeginPlay() override;
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	TObjectPtr<UInputMappingContext> IMC_Default;
+
+	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
+	TSubclassOf<UInGameWidget> InGameWidgetClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
+	TObjectPtr<UInGameWidget> InGameWidgetObject;
 
 	
 };

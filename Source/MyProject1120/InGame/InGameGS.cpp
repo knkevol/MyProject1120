@@ -2,4 +2,16 @@
 
 
 #include "InGameGS.h"
+#include "Net/UnrealNetwork.h"
 
+void AInGameGS::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AInGameGS, InGameConnectionCount);
+}
+
+void AInGameGS::OnRep_InGameConnectionCount()
+{
+	OnInGameChangeConnectionCount.Broadcast(InGameConnectionCount);
+}
