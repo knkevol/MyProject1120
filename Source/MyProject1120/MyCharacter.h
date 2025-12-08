@@ -145,9 +145,13 @@ public:
 	void C2S_Reload();
 	void C2S_Reload_Implementation();
 
-	UFUNCTION(Server, Reliable)
-	void C2S_Death();
-	void C2S_Death_Implementation();
+	UFUNCTION(NetMulticast, Unreliable)
+	void S2A_DoHit();
+	void S2A_DoHit_Implementation();
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void S2A_Death();
+	void S2A_Death_Implementation();
 
 	UFUNCTION(NetMulticast, Unreliable)
 	void S2A_HitEffect(const FHitResult& Hit);

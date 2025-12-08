@@ -114,8 +114,8 @@ void AMyCharacter::Reload()
 
 void AMyCharacter::HitReact()
 {
-	//FString SectionName = FString::Printf(TEXT("%d"), FMath::RandRange(1, 8));
-	//PlayAnimMontage(HitMontage, 1.0, FName(*SectionName));
+	DoHit();
+	S2A_DoHit();
 }
 
 void AMyCharacter::ReloadWeapon()
@@ -151,11 +151,11 @@ void AMyCharacter::StopFire()
 
 void AMyCharacter::DoDeadEnd()
 {
-	GetController()->SetActorEnableCollision(false);
+	//죽었을 때 움직이는 거 막아줘야함
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+	//GetController()->SetActorEnableCollision(false);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	GetMesh()->SetSimulatePhysics(true);
-
-	C2S_Death();
 }
 
 void AMyCharacter::DoDead()
@@ -171,7 +171,7 @@ void AMyCharacter::DoDead()
 	int32 RandDeathListNum = FMath::RandRange(0, DeathMontageList.Num() - 1);
 
 	PlayAnimMontage(DeathMontage, 1.0f, DeathMontageList[RandDeathListNum]);
-	UE_LOG(LogTemp, Warning, TEXT("DoDead"));
+	//UE_LOG(LogTemp, Warning, TEXT("DoDead"));
 }
 
 void AMyCharacter::DoHit()
@@ -387,13 +387,9 @@ void AMyCharacter::C2S_StopFire_Implementation()
 	}
 }
 
-void AMyCharacter::C2S_Death_Implementation()
+void AMyCharacter::S2A_Death_Implementation()
 {
-	if (CurHp <= 0)
-	{
-		//Death Montage
-		DoDead();
-	}
+	DoDead();
 }
 
 void AMyCharacter::S2A_HitEffect_Implementation(const FHitResult& Hit)
@@ -411,6 +407,11 @@ void AMyCharacter::S2A_HitEffect_Implementation(const FHitResult& Hit)
 void AMyCharacter::C2S_Reload_Implementation()
 {
 	Reload();
+}
+
+void AMyCharacter::S2A_DoHit_Implementation()
+{
+	DoHit();
 }
 
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -449,12 +450,15 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		UE_LOG(LogTemp, Warning, TEXT("Damage : %f"), DamageAmount);
 		UE_LOG(LogTemp, Warning, TEXT("CurHp : %f"), CurHp);
 	}
-	DoHit();
+	//C2S_DoHit();
+	HitReact();
 
 	if (CurHp <= 0)
 	{
 		//Death Montage
+		
 		DoDead();
+		S2A_Death();
 	}
 
 
