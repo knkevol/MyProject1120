@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Components/DecalComponent.h"
 #include "DamageTypeBase.h"
+#include "../Network/NetworkUtil.h"
 
 
 // Sets default values
@@ -27,7 +28,7 @@ AProjectileBase::AProjectileBase()
 	Movement->MaxSpeed = 8000.0f;
 	Movement->InitialSpeed = 8000.f;
 
-	SetReplicates(true);
+	bReplicates = true;
 	SetReplicateMovement(true);
 	bNetLoadOnClient = true;
 	bNetUseOwnerRelevancy = true;
@@ -88,7 +89,17 @@ void AProjectileBase::ProcessComponentHit(UPrimitiveComponent* HitComponent, AAc
 
 	SpawnHitEffect(Hit);
 
-	if (GetOwner())
+	////Owner 확인
+	//if (GetOwner())
+	//{
+	//	NET_LOG(FString::Printf(TEXT("Bullet Owner : %s"), *GetOwner()->GetName()));
+	//}
+	//else
+	//{
+	//	NET_LOG(TEXT("NoOwner"));
+	//}
+
+	if (!HasAuthority())
 	{
 		//서버아니면 총알주인 없음
 		return;
@@ -98,6 +109,7 @@ void AProjectileBase::ProcessComponentHit(UPrimitiveComponent* HitComponent, AAc
 	APawn* Pawn = Cast<APawn>(GetOwner()->GetOwner());
 	if (Pawn)
 	{
+		NET_LOG(FString::Printf(TEXT("%s %s"), *OtherActor->GetName(), *OtherComp->GetName()));
 		//총 데미지
 		UGameplayStatics::ApplyPointDamage(HitResult.GetActor(),
 			Damage,

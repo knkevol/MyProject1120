@@ -38,6 +38,7 @@ AMyCharacter::AMyCharacter()
 	StimuliSource = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>(TEXT("StimuliSource"));
 
 	SetGenericTeamId(1);
+	bReplicates = true;
 }
 
 // Called when the game starts or when spawned
@@ -128,7 +129,6 @@ void AMyCharacter::DoFire()
 	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
 	if (ChildWeapon)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("AMyCharacter::DoFire()"));
 		PlayAnimMontage(ChildWeapon->FireMontage);
 		ChildWeapon->Fire();
 	}
@@ -148,10 +148,11 @@ void AMyCharacter::StopFire()
 
 void AMyCharacter::DoDeadEnd()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Character_DoDeadEnd"));
 	GetController()->SetActorEnableCollision(false);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	GetMesh()->SetSimulatePhysics(true);
+
+	C2S_Death();
 }
 
 void AMyCharacter::DoDead()
@@ -377,6 +378,15 @@ void AMyCharacter::C2S_StopFire_Implementation()
 	}
 }
 
+void AMyCharacter::C2S_Death_Implementation()
+{
+	if (CurHp <= 0)
+	{
+		//Death Montage
+		DoDead();
+	}
+}
+
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
@@ -392,13 +402,9 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		FPointDamageEvent* Event = (FPointDamageEvent*)(&DamageEvent);
 		if (Event)
 		{
-			
-			CurHp -= DamageAmount;
-			UE_LOG(LogTemp, Warning, TEXT("Point Damage : %f %s"), DamageAmount, *(Event->HitInfo.BoneName.ToString()));
-			UE_LOG(LogTemp, Warning, TEXT("Point CurHp : %f"), CurHp);
-
-			SpawnHitEffect(Event->HitInfo);
+			CurHp -= DamageAmount;		
 		}
+		SpawnHitEffect(Event->HitInfo);
 	}
 	else if (DamageEvent.IsOfType(FRadialDamageEvent::ClassID))
 	{
@@ -455,6 +461,9 @@ void AMyCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(AMyCharacter, CurHp);
 	DOREPLIFETIME(AMyCharacter, MaxHp);
 	DOREPLIFETIME(AMyCharacter, State);
+	DOREPLIFETIME(AMyCharacter, HitMontage);
+	DOREPLIFETIME(AMyCharacter, DeathMontage);
+	DOREPLIFETIME(AMyCharacter, BloodEffect);
 }
 
 void AMyCharacter::SetGenericTeamId(const FGenericTeamId& InTeamID)

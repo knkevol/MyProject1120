@@ -114,7 +114,7 @@ public:
 	void StartCrouch();
 	void StopCrouch();
 
-	//목적지
+	//UFUNCTION(목적지, 값보장)
 	UFUNCTION(Server, Reliable)
 	void C2S_StartRun();
 	void C2S_StartRun_Implementation();
@@ -138,6 +138,10 @@ public:
 	UFUNCTION(Server, Reliable)
 	void C2S_StopFire();
 	void C2S_StopFire_Implementation();
+
+	UFUNCTION(Server, Reliable)
+	void C2S_Death();
+	void C2S_Death_Implementation();
 
 	//UFUNCTION(Server, Reliable)
 	//void C2S_StartLeanL();
@@ -203,11 +207,21 @@ public:
 
 
 	// -----Montage-----
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1208", Replicated)
 	TObjectPtr<UAnimMontage> HitMontage;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1120")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1208", Replicated)
 	TObjectPtr<UAnimMontage> DeathMontage;
+
+	// -----Effect-----
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1208", Replicated)
+	TObjectPtr<UParticleSystem> BloodEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1128")
+	TObjectPtr<UAIPerceptionStimuliSourceComponent> StimuliSource;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void SpawnHitEffect(FHitResult Hit);
 
 
 	// -----Input Action-----
@@ -231,19 +245,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1205")
 	TObjectPtr<UInputAction> IA_Crouch;
-
-
-	// -----Effect-----
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1127")
-	TObjectPtr<UParticleSystem> BloodEffect;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1128")
-	TObjectPtr<UAIPerceptionStimuliSourceComponent> StimuliSource;
-
-	UFUNCTION(BlueprintCallable)
-	virtual void SpawnHitEffect(FHitResult Hit);
-
-
 
 	// ----IGenericTeamAgentInterface-----
 	virtual void SetGenericTeamId(const FGenericTeamId& InTeamID) override;
