@@ -63,9 +63,6 @@ public:
 	void Reload();
 
 	UFUNCTION(BlueprintCallable)
-	void HitReact();
-
-	UFUNCTION(BlueprintCallable)
 	void ReloadWeapon();
 
 	UFUNCTION(BlueprintCallable)

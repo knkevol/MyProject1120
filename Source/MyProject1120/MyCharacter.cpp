@@ -114,12 +114,6 @@ void AMyCharacter::Reload()
 	}
 }
 
-void AMyCharacter::HitReact()
-{
-	DoHit();
-	S2A_DoHit();
-}
-
 void AMyCharacter::ReloadWeapon()
 {
 	AWeaponBase* ChildWeapon = Cast<AWeaponBase>(Weapon->GetChildActor());
@@ -351,6 +345,7 @@ void AMyCharacter::DoReload()
 {
 	Reload();
 	C2S_Reload();
+	
 }
 
 void AMyCharacter::C2S_StartRun_Implementation()
@@ -452,8 +447,7 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		UE_LOG(LogTemp, Warning, TEXT("Damage : %f"), DamageAmount);
 		UE_LOG(LogTemp, Warning, TEXT("CurHp : %f"), CurHp);
 	}
-	//C2S_DoHit();
-	HitReact();
+	S2A_DoHit();
 
 	if (CurHp <= 0)
 	{
