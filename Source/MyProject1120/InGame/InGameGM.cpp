@@ -3,7 +3,6 @@
 
 #include "InGameGM.h"
 #include "InGameGS.h"
-#include "InGameWidget.h"
 #include "../MyCharacter.h"
 
 AInGameGM::AInGameGM()
@@ -12,43 +11,65 @@ AInGameGM::AInGameGM()
 
 void AInGameGM::BeginPlay()
 {
+	// no use
 	Super::BeginPlay();
-	CheckInGameConnectionCount();
+	//위젯존재안함 
+	//CheckInGameConnectionCount();
 }
 
 void AInGameGM::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
-	CheckInGameConnectionCount();
+	CheckInGameCount();
 }
 
 void AInGameGM::Logout(AController* Exiting)
 {
-	CheckInGameConnectionCount();
+	CheckInGameCount();
 
 	Super::Logout(Exiting);
 }
 
-int32 AInGameGM::CheckInGameConnectionCount()
+int32 AInGameGM::CheckInGameCount()
 {
-	int32 TempCount = 0;
+	int32 PCCnt= 0;
+	int32 InCount = 0;
 	for (auto Iter = GetWorld()->GetPlayerControllerIterator(); Iter; ++Iter)
 	{
+		++PCCnt;
 		AMyCharacter* Pawn = Cast<AMyCharacter>((*Iter)->GetPawn());
 		if (Pawn)
 		{
 			if (Pawn->CurHp > 0)
 			{
-				TempCount++;
+				InCount++;
 			}
 		}
 	}
+
+
 	
 	AInGameGS* GS = GetGameState<AInGameGS>();
 	if (GS)
 	{
-		GS->UpdateInGameCount(TempCount);
+		GS->UpdateInGameCount(InCount);
 	}
 
-	return TempCount;
+	FTimerHandle EndTimer;
+
+
+	if (PCCnt >= 2 && InCount == 1)
+	{
+		GetWorld()->GetTimerManager().SetTimer(EndTimer,
+			FTimerDelegate::CreateLambda([this]() {
+				GetWorld()->ServerTravel(TEXT("Lobby"));
+				}),
+			10.0f,
+			false,
+			0.0f
+		);
+	}
+	
+
+	return InCount;
 }

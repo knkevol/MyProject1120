@@ -7,6 +7,8 @@
 #include "GenericTeamAgentInterface.h"
 #include "MyCharacter.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChangedHP, const float, Percent);
+
 class USpringArmComponent;
 class UCameraComponent;
 class UInputAction;
@@ -208,8 +210,10 @@ public:
 	uint8 bIsFire : 1 = false;
 
 
+	UFUNCTION()
+	void OnRep_CurHP();
 	// -----Player State-----
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1205", Replicated)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1205", ReplicatedUsing = "OnRep_CurHP")
 	float CurHp = 100;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1205", Replicated)
 	float MaxHp = 100;
@@ -257,6 +261,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1205")
 	TObjectPtr<UInputAction> IA_Crouch;
 
+	UPROPERTY(BlueprintAssignable)
+	FOnChangedHP OnHpChanged;
+
 	// ----IGenericTeamAgentInterface-----
 	virtual void SetGenericTeamId(const FGenericTeamId& InTeamID) override;
 	virtual FGenericTeamId GetGenericTeamId() const override;
@@ -264,7 +271,6 @@ public:
 	FGenericTeamId TeamID;
 
 	void DrawFrustum();
-
 
 	FRotator GetAimOffset() const;
 };

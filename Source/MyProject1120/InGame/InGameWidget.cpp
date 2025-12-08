@@ -3,8 +3,11 @@
 
 #include "InGameWidget.h"
 #include "InGameGS.h"
+#include "InGameGM.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/TextBlock.h"
+#include "Components/ProgressBar.h"
+#include "../MyCharacter.h"
 
 void UInGameWidget::NativeOnInitialized()
 {
@@ -13,24 +16,43 @@ void UInGameWidget::NativeOnInitialized()
 	AInGameGS* GS = Cast<AInGameGS>(UGameplayStatics::GetGameState(GetWorld()));
 	if (GS)
 	{
+		ProcessChangeInGameCount(GS->InGameCounts);
 		GS->OnChangeInGameCount.BindUObject(this, &UInGameWidget::ProcessChangeInGameCount);
 	}
-}
 
-void UInGameWidget::UpdateInGameConnectionCount(int32 InConnectionCount)
-{
-	if (InGameConnectionCount)
+	AInGameGM* GM = Cast<AInGameGM>(UGameplayStatics::GetGameMode(GetWorld()));
+	if (GM)
 	{
-		FString Message = FString::Printf(TEXT("%d명 생존"), InConnectionCount);
-		InGameConnectionCount->SetText(FText::FromString(Message));
+		GM->CheckInGameCount();
+	}
+
+	APlayerController* PC = Cast<APlayerController>(GetOwningPlayer());
+	if (PC)
+	{
+		AMyCharacter* Pawn = Cast<AMyCharacter>(PC->GetPawn());
+		if (Pawn)
+		{
+			Pawn->OnHpChanged.AddDynamic(this, &UInGameWidget::ProcessHPBar);
+			Pawn->OnRep_CurHP();
+		}
 	}
 }
 
 void UInGameWidget::ProcessChangeInGameCount(int32 InConnectionCount)
 {
-	if (InGameConnectionCount)
+	if (InGameCount)
 	{
 		FString Temp = FString::Printf(TEXT("%d명 생존"), InConnectionCount);
-		InGameConnectionCount->SetText(FText::FromString(Temp));
+		InGameCount->SetText(FText::FromString(Temp));
+	}
+}
+
+void UInGameWidget::ProcessHPBar(float InPercent)
+{
+	if (HPBar)
+	{
+		
+		HPBar->SetPercent(InPercent);
+		
 	}
 }

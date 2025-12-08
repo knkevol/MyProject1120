@@ -7,7 +7,7 @@
 #include "InGameGS.generated.h"
 
 //BP not use
-DECLARE_DELEGATE_OneParam(FOnChangedInGameConnectionCount, const int32);
+DECLARE_DELEGATE_OneParam(FOnChangedInGameCount, const int32);
 
 /**
  * 
@@ -22,13 +22,13 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UFUNCTION()
-	void OnRep_InGameConnectionCount();
+	void OnRep_InGameCount();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = 1208, ReplicatedUsing = "OnRep_InGameConnectionCount")
-	int32 InGameCount = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = 1208, ReplicatedUsing = "OnRep_InGameCount")
+	int32 InGameCounts;
 
 	
-	FOnChangedInGameConnectionCount OnChangeInGameCount;
+	FOnChangedInGameCount OnChangeInGameCount;
 
 
 	void UpdateInGameCount(int32 ConnectCount);

@@ -20,16 +20,16 @@ class MYPROJECT1120_API UInGameWidget : public UUserWidget
 public:
 	virtual void NativeOnInitialized() override;
 
-	UFUNCTION(BlueprintCallable)
-	void UpdateInGameConnectionCount(int32 InConnectionCount);
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Component, meta = (WidgetBind))
-	TObjectPtr <UTextBlock> InGameConnectionCount;
+	TObjectPtr <UTextBlock> InGameCount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Component, meta = (WidgetBind))
 	TObjectPtr <UProgressBar> HPBar;
 
 	UFUNCTION()
 	void ProcessChangeInGameCount(int32 InConnectionCount);
+
+	UFUNCTION()
+	void ProcessHPBar(float InPercent);
 	
 };

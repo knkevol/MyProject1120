@@ -24,7 +24,7 @@ public:
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 	virtual void Logout(AController* Exiting) override;
 
-	int32 CheckInGameConnectionCount();
+	int32 CheckInGameCount();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Data)
 	TObjectPtr<UInGameWidget> InGameWidgetObject;

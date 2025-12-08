@@ -8,18 +8,18 @@ void AInGameGS::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetim
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(AInGameGS, InGameCount);
+	DOREPLIFETIME(AInGameGS, InGameCounts);
 }
 
-void AInGameGS::OnRep_InGameConnectionCount()
+void AInGameGS::OnRep_InGameCount()
 {
-	OnChangeInGameCount.ExecuteIfBound(InGameCount);
+	OnChangeInGameCount.ExecuteIfBound(InGameCounts);
 }
 
 
 void AInGameGS::UpdateInGameCount(int32 ConnectCount)
 {
-	InGameCount = ConnectCount;
-	OnRep_InGameConnectionCount();
+	InGameCounts = ConnectCount;
+	OnRep_InGameCount();
 
 }

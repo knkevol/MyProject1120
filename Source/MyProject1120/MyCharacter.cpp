@@ -414,6 +414,7 @@ void AMyCharacter::S2A_DoHit_Implementation()
 float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	FHitResult HitResult;
 
 	if (CurHp <= 0)
 	{
@@ -430,6 +431,7 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		}
 		//SpawnHitEffect(Event->HitInfo);
 		S2A_HitEffect(Event->HitInfo);
+		HitResult = Event->HitInfo;
 	}
 	else if (DamageEvent.IsOfType(FRadialDamageEvent::ClassID))
 	{
@@ -448,6 +450,7 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		UE_LOG(LogTemp, Warning, TEXT("CurHp : %f"), CurHp);
 	}
 	S2A_DoHit();
+	OnRep_CurHP();
 
 	if (CurHp <= 0)
 	{
@@ -455,13 +458,18 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		AInGameGM* GM = Cast<AInGameGM>(UGameplayStatics::GetGameMode(GetWorld()));
 		if (GM)
 		{
-			GM->CheckInGameConnectionCount();
+			GM->CheckInGameCount();
 		}
 		S2A_Death();
 	}
 
 
 	return 0.0f;
+}
+
+void AMyCharacter::OnRep_CurHP()
+{
+	OnHpChanged.Broadcast(CurHp / MaxHp);
 }
 
 void AMyCharacter::SpawnHitEffect(FHitResult Hit)

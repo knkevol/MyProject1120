@@ -41,19 +41,14 @@ void AMyPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (InGameWidgetClass)
+	if (IsLocalPlayerController()) //Network 작업 _ UI는 서버에서 붙이면 안됨
 	{
-		if (IsLocalPlayerController()) //Network 작업 _ UI는 서버에서 붙이면 안됨
+		if (InGameWidgetClass)
 		{
 			InGameWidgetObject = CreateWidget<UInGameWidget>(this, InGameWidgetClass);
 			InGameWidgetObject->AddToViewport();
-
-			AInGameGM* GM = Cast<AInGameGM>(UGameplayStatics::GetGameMode(GetWorld()));
-			if (GM)
-			{
-				GM->CheckInGameConnectionCount();
-			}
 		}
+		
 	}
 }
 
