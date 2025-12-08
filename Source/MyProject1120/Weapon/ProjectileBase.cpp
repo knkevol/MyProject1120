@@ -111,10 +111,10 @@ void AProjectileBase::ProcessComponentHit(UPrimitiveComponent* HitComponent, AAc
 	{
 		NET_LOG(FString::Printf(TEXT("%s %s"), *OtherActor->GetName(), *OtherComp->GetName()));
 		//총 데미지
-		UGameplayStatics::ApplyPointDamage(HitResult.GetActor(),
+		UGameplayStatics::ApplyPointDamage(Hit.GetActor(),
 			Damage,
-			-HitResult.ImpactNormal,
-			HitResult,
+			-Hit.ImpactNormal,
+			Hit,
 			Pawn->GetController(),
 			this,
 			UDamageTypeBase::StaticClass());
@@ -125,7 +125,7 @@ void AProjectileBase::SpawnHitEffect(FHitResult Hit)
 {
 	if (Decal)
 	{
-		UDecalComponent* MadeDecal = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), Decal, FVector(15, 15, 15),
+		UDecalComponent* MadeDecal = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), Decal, FVector(10, 10, 10),
 			Hit.ImpactPoint, Hit.ImpactNormal.Rotation(), 5.f);
 
 		if (MadeDecal)

@@ -396,6 +396,18 @@ void AMyCharacter::C2S_Death_Implementation()
 	}
 }
 
+void AMyCharacter::S2A_HitEffect_Implementation(const FHitResult& Hit)
+{
+	if (BloodEffect)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),
+			BloodEffect,
+			Hit.ImpactPoint,
+			Hit.ImpactNormal.Rotation());
+
+	}
+}
+
 void AMyCharacter::C2S_Reload_Implementation()
 {
 	Reload();
@@ -418,7 +430,8 @@ float AMyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEve
 		{
 			CurHp -= DamageAmount;		
 		}
-		SpawnHitEffect(Event->HitInfo);
+		//SpawnHitEffect(Event->HitInfo);
+		S2A_HitEffect(Event->HitInfo);
 	}
 	else if (DamageEvent.IsOfType(FRadialDamageEvent::ClassID))
 	{
@@ -475,9 +488,6 @@ void AMyCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(AMyCharacter, CurHp);
 	DOREPLIFETIME(AMyCharacter, MaxHp);
 	DOREPLIFETIME(AMyCharacter, State);
-	DOREPLIFETIME(AMyCharacter, HitMontage);
-	DOREPLIFETIME(AMyCharacter, DeathMontage);
-	DOREPLIFETIME(AMyCharacter, BloodEffect);
 }
 
 void AMyCharacter::SetGenericTeamId(const FGenericTeamId& InTeamID)

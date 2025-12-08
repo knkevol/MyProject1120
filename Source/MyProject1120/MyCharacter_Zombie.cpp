@@ -68,13 +68,9 @@ float AMyCharacter_Zombie::TakeDamage(float DamageAmount, FDamageEvent const& Da
 		FPointDamageEvent* Event = (FPointDamageEvent*)(&DamageEvent);
 		if (Event)
 		{
-
-			CurHp -= DamageAmount;
-			UE_LOG(LogTemp, Warning, TEXT("Point Damage : %f %s"), DamageAmount, *(Event->HitInfo.BoneName.ToString()));
-			UE_LOG(LogTemp, Warning, TEXT("Point CurHp : %f"), CurHp);
-
-			SpawnHitEffect(Event->HitInfo);
+			CurHp -= DamageAmount;			
 		}
+		SpawnHitEffect(Event->HitInfo);
 	}
 	else if (DamageEvent.IsOfType(FRadialDamageEvent::ClassID))
 	{

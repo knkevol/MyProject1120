@@ -142,16 +142,16 @@ public:
 	void C2S_StopFire_Implementation();
 
 	UFUNCTION(Server, Reliable)
-	void C2S_Death();
-	void C2S_Death_Implementation();
-
-	UFUNCTION(Server, Reliable)
 	void C2S_Reload();
 	void C2S_Reload_Implementation();
 
-	//UFUNCTION(NetMulticast, Unreliable)
-	//void S2A_HitEffect();
-	//void S2A_HitEffect_Implementation();
+	UFUNCTION(Server, Reliable)
+	void C2S_Death();
+	void C2S_Death_Implementation();
+
+	UFUNCTION(NetMulticast, Unreliable)
+	void S2A_HitEffect(const FHitResult& Hit);
+	void S2A_HitEffect_Implementation(const FHitResult& Hit);
 
 	//UFUNCTION(Server, Reliable)
 	//void C2S_StartLeanL();
