@@ -37,13 +37,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "1120")
 	TObjectPtr<USpringArmComponent> SpringArm;
 
@@ -52,6 +45,26 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "1120")
 	TObjectPtr<class UChildActorComponent> Weapon;
+
+public:	
+	FORCEINLINE class USpringArmComponent* GetSpringArm() const
+	{
+		return SpringArm;
+	}
+
+	FORCEINLINE class UCameraComponent* GetCameraComponent() const
+	{
+		return Camera;
+	}
+
+
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	
 
 
 	// -----Input Function-----

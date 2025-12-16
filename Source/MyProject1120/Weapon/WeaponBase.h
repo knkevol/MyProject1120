@@ -85,7 +85,9 @@ public:
 	FTimerHandle RefireTimer;
 
 
-	bool CalculateShootData(FVector& OutSpawnLocation, FVector& OutTargetLocation, FVector& OutBulletDirection, FRotator& OutAimRotation);
+	bool CalculateShootData(FVector& OutSpawnLocation, FVector& OutTargetLocation, FRotator& OutAimRotation);
+
+	FVector GetWeaponTargetLocation();
 
 	UFUNCTION(NetMulticast, Unreliable)
 	void S2A_SpawnMuzzleFlash(const FVector& OutSpawnLocation, const FRotator& OutAimRotation);

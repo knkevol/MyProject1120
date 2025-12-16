@@ -14,6 +14,8 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "../MyProject1120.h"
 #include "../Network/NetworkUtil.h"
+#include "../MyCharacter.h"
+#include "Camera/CameraComponent.h"
 
 
 // Sets default values
@@ -84,16 +86,16 @@ void AWeaponBase::Fire()
 	FRotator AimRotation;
 	FHitResult HitResult;
 
-	SpawnLocation = Mesh->GetSocketLocation(TEXT("Muzzle"));
-	FVector WeaponForward = Mesh->GetSocketRotation(TEXT("Muzzle")).Vector().GetSafeNormal();
-	TargetLocation = SpawnLocation + (WeaponForward * 100000.0f);
-	AimRotation = UKismetMathLibrary::FindLookAtRotation(SpawnLocation, TargetLocation + (UKismetMathLibrary::RandomUnitVector() * 0.3));
+	//SpawnLocation = Mesh->GetSocketLocation(TEXT("Muzzle"));
+	//FVector WeaponForward = Mesh->GetSocketRotation(TEXT("Muzzle")).Vector().GetSafeNormal();
+	//TargetLocation = SpawnLocation + (WeaponForward * 100000.0f);
+	//AimRotation = UKismetMathLibrary::FindLookAtRotation(SpawnLocation, TargetLocation + (UKismetMathLibrary::RandomUnitVector() * 0.3));
 
-	//bool bResult = CalculateShootData(SpawnLocation, TargetLocation, BulletDirection, AimRotation);
-	//if (!bResult)
-	//{
-	//	return;
-	//}
+	bool bResult = CalculateShootData(SpawnLocation, TargetLocation, AimRotation);
+	if (!bResult)
+	{
+		return;
+	}
 
 
 	FireProjectile(FTransform(AimRotation, SpawnLocation, FVector::OneVector), HitResult);
@@ -123,72 +125,58 @@ void AWeaponBase::FireProjectile(FTransform SpawnTransform, FHitResult InHitResu
 	
 }
 
-bool AWeaponBase::CalculateShootData(FVector& OutSpawnLocation, FVector& OutTargetLocation, FVector& OutBulletDirection, FRotator& OutAimRotation)
+bool AWeaponBase::CalculateShootData(FVector& OutSpawnLocation, FVector& OutTargetLocation, FRotator& OutAimRotation)
 {
 
-	ACharacter* Character = Cast<ACharacter>(GetOwner());
+	AMyCharacter* Character = Cast<AMyCharacter>(GetOwner());
 	if (!Character)
 	{
 		return false;
 	}
-	APlayerController* PC = Cast<APlayerController>(Character->GetController());
-	if (!PC)
+
+	FHitResult OutHit;
+
+	const FVector Start = Character->GetCameraComponent()->GetComponentLocation();
+	const FVector End = Start + (Character->GetCameraComponent()->GetForwardVector() * 10000.0f);
+
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this);
+	QueryParams.AddIgnoredActor(Character);
+
+	GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, QueryParams);
+
+	//Calculate
+	OutSpawnLocation = Mesh->GetSocketLocation(TEXT("Muzzle"));
+	OutTargetLocation = OutHit.bBlockingHit ? OutHit.ImpactPoint : OutHit.TraceEnd;
+
+
+	OutAimRotation = UKismetMathLibrary::FindLookAtRotation(OutSpawnLocation, OutTargetLocation + (UKismetMathLibrary::RandomUnitVector() * 0.3));
+
+
+	return true;
+}
+
+FVector AWeaponBase::GetWeaponTargetLocation()
+{
+	AMyCharacter* Character = Cast<AMyCharacter>(GetOwner());
+
+	if (!Character)
 	{
-		return false;
+		return FVector::Zero();
 	}
-		UE_LOG(LogTemp, Warning, TEXT("AWeaponBase::CalculateShootData() _ PC"));
-		int32 SizeX = 0;
-		int32 SizeY = 0;
-		int32 CenterX = 0;
-		int32 CenterY = 0;
-		FVector WorldDirection;
-		FVector WorldLocation;
-		FVector CameraLocation;
-		FRotator CameraRotation;
 
-		PC->GetViewportSize(SizeX, SizeY);
-		CenterX = SizeX / 2;
-		CenterY = SizeY / 2;
+	FHitResult OutHit;
 
-		PC->DeprojectScreenPositionToWorld((float)CenterX, (float)CenterY,
-			WorldLocation, WorldDirection);
+	const FVector Start = Character->GetCameraComponent()->GetComponentLocation();
+	const FVector End = Start + (Character->GetCameraComponent()->GetForwardVector() * 10000.0f);
 
-		PC->GetPlayerViewPoint(CameraLocation, CameraRotation);
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this);
 
-		FVector Start = CameraLocation;
-		FVector End = CameraLocation + WorldDirection * 100000.0f;
+	GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, QueryParams);
 
-		TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
-		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldStatic));
-		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldDynamic));
-		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_PhysicsBody));
-
-		TArray<AActor*> IngnoreActors;
-		IngnoreActors.Add(GetOwner());
-		FHitResult HitResult;
-
-		bool bResult = UKismetSystemLibrary::LineTraceSingleForObjects(
-			GetWorld(),
-			Start,
-			End,
-			ObjectTypes,
-			true,
-			IngnoreActors,
-			EDrawDebugTrace::ForOneFrame,
-			HitResult,
-			true
-		);
-
-		//Calculate
-		OutSpawnLocation = Mesh->GetSocketLocation(TEXT("Muzzle"));
-		OutTargetLocation = bResult ? HitResult.ImpactPoint : End;
-		OutBulletDirection = (OutTargetLocation - OutSpawnLocation).GetSafeNormal();
-
-
-		OutAimRotation = UKismetMathLibrary::FindLookAtRotation(OutSpawnLocation, OutTargetLocation + (UKismetMathLibrary::RandomUnitVector() * 0.3));
-
-
-		return true;
+	// return either the impact point or the trace end
+	return OutHit.bBlockingHit ? OutHit.ImpactPoint : OutHit.TraceEnd;
 }
 
 // Client에서만 실행. Server to All

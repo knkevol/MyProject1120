@@ -44,6 +44,7 @@ void AProjectileBase::BeginPlay()
 	//OnActorBeginOverlap.AddDynamic(this, &AProjectileBase::ProcessBeginOverlap);
 	Box->OnComponentHit.AddDynamic(this, &AProjectileBase::ProcessComponentHit);
 
+	//설정 안해주면 액터 누수로 네트워크 느려져서 정상작동 안됨
 	SetLifeSpan(5.0f);
 	
 }
