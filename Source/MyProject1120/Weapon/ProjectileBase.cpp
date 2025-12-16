@@ -43,6 +43,8 @@ void AProjectileBase::BeginPlay()
 
 	//OnActorBeginOverlap.AddDynamic(this, &AProjectileBase::ProcessBeginOverlap);
 	Box->OnComponentHit.AddDynamic(this, &AProjectileBase::ProcessComponentHit);
+
+	SetLifeSpan(5.0f);
 	
 }
 
@@ -109,7 +111,7 @@ void AProjectileBase::ProcessComponentHit(UPrimitiveComponent* HitComponent, AAc
 	APawn* Pawn = Cast<APawn>(GetOwner()->GetOwner());
 	if (Pawn)
 	{
-		NET_LOG(FString::Printf(TEXT("%s %s"), *OtherActor->GetName(), *OtherComp->GetName()));
+		//NET_LOG(FString::Printf(TEXT("%s %s"), *OtherActor->GetName(), *OtherComp->GetName()));
 		//총 데미지
 		UGameplayStatics::ApplyPointDamage(Hit.GetActor(),
 			Damage,
@@ -125,7 +127,7 @@ void AProjectileBase::SpawnHitEffect(FHitResult Hit)
 {
 	if (Decal)
 	{
-		UDecalComponent* MadeDecal = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), Decal, FVector(10, 10, 10),
+		UDecalComponent* MadeDecal = UGameplayStatics::SpawnDecalAtLocation(GetWorld(), Decal, FVector(5, 5, 5),
 			Hit.ImpactPoint, Hit.ImpactNormal.Rotation(), 5.f);
 
 		if (MadeDecal)

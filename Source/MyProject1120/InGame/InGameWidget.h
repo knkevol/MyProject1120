@@ -27,7 +27,7 @@ public:
 	TObjectPtr <UProgressBar> HPBar;
 
 	UFUNCTION()
-	void ProcessChangeInGameCount(int32 InConnectionCount);
+	void ProcessChangeInGameCount(int32 InChangeGameCount);
 
 	UFUNCTION()
 	void ProcessHPBar(float InPercent);

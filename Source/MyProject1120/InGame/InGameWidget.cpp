@@ -16,7 +16,6 @@ void UInGameWidget::NativeOnInitialized()
 	AInGameGS* GS = Cast<AInGameGS>(UGameplayStatics::GetGameState(GetWorld()));
 	if (GS)
 	{
-		ProcessChangeInGameCount(GS->InGameCounts);
 		GS->OnChangeInGameCount.BindUObject(this, &UInGameWidget::ProcessChangeInGameCount);
 	}
 
@@ -38,11 +37,11 @@ void UInGameWidget::NativeOnInitialized()
 	}
 }
 
-void UInGameWidget::ProcessChangeInGameCount(int32 InConnectionCount)
+void UInGameWidget::ProcessChangeInGameCount(int32 InChangeGameCount)
 {
 	if (InGameCount)
 	{
-		FString Temp = FString::Printf(TEXT("%d명 생존"), InConnectionCount);
+		FString Temp = FString::Printf(TEXT("%d명 생존"), InChangeGameCount);
 		InGameCount->SetText(FText::FromString(Temp));
 	}
 }

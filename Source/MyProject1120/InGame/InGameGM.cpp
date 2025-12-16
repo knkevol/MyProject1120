@@ -34,6 +34,8 @@ int32 AInGameGM::CheckInGameCount()
 {
 	int32 PCCnt= 0;
 	int32 InCount = 0;
+	AInGameGS* GS = GetGameState<AInGameGS>();
+
 	for (auto Iter = GetWorld()->GetPlayerControllerIterator(); Iter; ++Iter)
 	{
 		++PCCnt;
@@ -49,7 +51,7 @@ int32 AInGameGM::CheckInGameCount()
 
 
 	
-	AInGameGS* GS = GetGameState<AInGameGS>();
+	
 	if (GS)
 	{
 		GS->UpdateInGameCount(InCount);
@@ -61,12 +63,13 @@ int32 AInGameGM::CheckInGameCount()
 	if (PCCnt >= 2 && InCount == 1)
 	{
 		GetWorld()->GetTimerManager().SetTimer(EndTimer,
-			FTimerDelegate::CreateLambda([this]() {
+			FTimerDelegate::CreateLambda([&]() {
+				GetWorld()->GetTimerManager().ClearTimer(EndTimer);
 				GetWorld()->ServerTravel(TEXT("Lobby"));
 				}),
 			10.0f,
 			false,
-			0.0f
+			-1.0f
 		);
 	}
 	
